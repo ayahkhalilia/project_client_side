@@ -17,6 +17,7 @@ const SignupPage=()=>{
 
     return(
         <div className='login-container'>
+          <div className='small-rec-login-signup'>
             <h1>Signup</h1>
             <form onSubmit={handleSubmit}>
                 <div className='form-group'>
@@ -54,6 +55,7 @@ const SignupPage=()=>{
                 </div>
                 <button type='submit'>Signup</button>
             </form>
+          </div>
         </div>
     );
 };

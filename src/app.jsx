@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Routes, Route } from 'react-router-dom';
 import LoginPage from './components/login.jsx'; 
 import HomePage from './pages/homepage.jsx';
 import SignupPage from './components/signup.jsx';

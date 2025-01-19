@@ -1,4 +1,5 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
+import API from '../axiosConfig'; 
 import {IoHomeOutline,IoSettingsOutline} from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
@@ -9,6 +10,27 @@ import SearchBar from '../components/searchbar.jsx';
 import '../index.css';
 
 const HomePage=()=>{
+    const [books, setBooks] = useState([]); // State to store books
+    const [loading, setLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error state
+
+    // Fetch books from the server
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const response = await API.get('/api/books');
+                setBooks(response.data); // Assuming API sends an array of books
+            } catch (err) {
+                setError('Failed to fetch books from the server');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBooks();
+    }, []);
+    if (loading) return <p>Loading books...</p>;
+    if (error) return <p>{error}</p>;
     const handleSearch = (query) => {
         const filteredResults = data.filter((item) =>
             item.toLowerCase().includes(query.toLowerCase())
@@ -59,6 +81,19 @@ const HomePage=()=>{
                 <div className='search-bar'>
                         <SearchBar onSearch={handleSearch} />
                 </div> 
+                <div className="books-list">
+                {books.length > 0 ? (
+                    <ul>
+                        {books.map((book) => (
+                            <li key={book._id}>
+                                <strong>{book.title}</strong> by {book.author}
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No books available</p>
+                )}
+            </div>
             </div>
  
         </div>

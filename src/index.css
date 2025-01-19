@@ -86,6 +86,29 @@
 
 .login-container{
   justify-items: center;
+  padding-top: 100px;
+  background: #f0f0f0;
+  height: 100vh;
+}
+
+.small-rec-login-signup{
+  background: #cdcbcb;
+  width: 300px;
+  height: 250px;
+}
+
+.small-rec-login-signup h1{
+  padding-top: 35px;
+  padding-left: 110px;
+}
+
+.small-rec-login-signup form{
+  padding-top: 30px;
+  justify-items: center;
+}
+
+.dont-have-account{
+  font-weight: 100;
 }
 
 .sign-up a{
