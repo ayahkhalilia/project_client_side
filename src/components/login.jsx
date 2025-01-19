@@ -1,14 +1,7 @@
 import React,{useState} from 'react';
 import ReactDOM from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import '../index.css';
-
-/*export default function Home(){
-    return(
-        <div>login</div>
-    )
-}
-*/
 
 const LoginPage=()=>{
     const [username,setUsername]=useState("");
@@ -49,6 +42,8 @@ const LoginPage=()=>{
                     />
                 </div>
                 <button type='submit'>Login</button>
+                <h3 className='dont-have-account'>Don't have an account?</h3>
+                <h3 className='sign-up'><Link to="/signup">Signup</Link></h3>
             </form>
         </div>
     );
