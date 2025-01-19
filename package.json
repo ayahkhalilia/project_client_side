@@ -9,9 +9,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\"",
-    "build": "react-scripts build",
-    "electron-build": "electron-forge start"
+    "lint": "echo \"No linting configured\""
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
