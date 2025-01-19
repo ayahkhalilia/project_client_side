@@ -15,7 +15,7 @@ const createWindow = () => {
   });
 
   // Make sure to load the built React app
-  mainWindow.loadURL(path.join('file://', __dirname, '../build/index.html'));
+  mainWindow.loadURL(path.join(`file://${path.join(__dirname, '../build/index.html')}`));
 
   mainWindow.webContents.openDevTools();
 };
