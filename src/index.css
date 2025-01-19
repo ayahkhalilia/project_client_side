@@ -1,26 +1,94 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
-  margin: auto;
-  
+/* CustomerPage.css */
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.nav-bar{
-  background: green;
+/* General Layout */
+.nav-bar {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
 }
 
-.nav-bar #homepage{
-  padding-left: 260px;
-}
-
-.bar-rec{
+/* Sidebar */
+.bar-rec {
   width: 250px;
-  height:auto;
-  background: #D9F0E5;
-  padding-left: 10px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.bar-rec .setting{
-  padding-top: 500px;
+.bar-rec .settings-icon {
+  margin-bottom: 20px;
+  cursor: pointer;
 }
 
+.bar-rec a {
+  text-decoration: none;
+  color: #333;
+  margin: 10px 0;
+  font-size: 18px;
+  display: block;
+}
+
+/* Main Content */
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.homepage {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* Customer List */
+.customer-list {
+  text-align: center;
+}
+
+.customer-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.customer-list li {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.login-container{
+  justify-items: center;
+}
+
+.sign-up a{
+  text-decoration: none;
+  color: #333;
+}
