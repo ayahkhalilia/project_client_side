@@ -86,7 +86,7 @@ const HomePage=()=>{
                     <ul>
                         {books.map((book) => (
                             <li key={book._id}>
-                                <strong>{book.title}</strong> by {book.author}
+                                <strong>{book.title}</strong> {book.author} {book.category} {book.book_status} {book.total_copies} {book.available_copies}
                             </li>
                         ))}
                     </ul>
