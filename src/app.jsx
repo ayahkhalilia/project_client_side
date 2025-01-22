@@ -7,6 +7,7 @@ import CustomersPage from './pages/customerspage.jsx';
 import BookRequestsPage from './pages/bookrequestspage.jsx';
 import BookDonationsPage from './pages/bookdonationspage.jsx';
 import RoomBookingPage from './pages/roombookingpage.jsx';
+import BookDetailsPage from './pages/bookdetailspage.jsx'
 
 const App = () => {
     return (
@@ -18,6 +19,7 @@ const App = () => {
             <Route path="/book-requests" element={<BookRequestsPage />} />
             <Route path="/book-donations" element={<BookDonationsPage />} />
             <Route path="/room-booking" element={<RoomBookingPage />} />
+            <Route path='/books/:book_id' element={<BookDetailsPage />}/>
         </Routes>
     );
 };

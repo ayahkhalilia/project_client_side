@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-
-const SearchBar = () => {
-    const [query, setQuery] = useState(""); // State to hold search input
+import axios from 'axios';
+const SearchBar = ({apiEndpoint, onResults}) => {
+    const [query, setQuery] = useState("");
 
     const handleInputChange = (e) => {
-        setQuery(e.target.value); // Update state with input value
+        setQuery(e.target.value);
     };
 
-    const handleSearch = () => {
-        console.log("Search Query:", query); // Log or handle the search query
+    const handleSearch = async () => {
+        try {
+            const response = await axios.get(`${apiEndpoint}/${query}`); // Pass query as book_id
+            onResults([response.data]); // Ensure results are in an array
+        } catch (error) {
+            console.error(`Error fetching data:`, error);
+        }    
     };
 
     return (
@@ -17,7 +22,7 @@ const SearchBar = () => {
                 type="text"
                 placeholder="Search..."
                 value={query}
-                onChange={handleInputChange} // Handle input changes
+                onChange={handleInputChange}
             />
             <button onClick={handleSearch}>Search</button> {/* Trigger search */}
         </div>

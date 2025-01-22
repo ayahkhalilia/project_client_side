@@ -115,3 +115,59 @@
   text-decoration: none;
   color: #333;
 }
+
+.books-list{
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f5f5f5;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
+
+.header-item {
+  flex: 1; /* Adjust width based on layout needs */
+  text-align: left;
+  padding: 5px;
+}
+
+/* Style the list container and items */
+ul.book-items {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.book-items li.book-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Ensure the link inside the list item inherits the flex layout */
+.book-item .link-to-detailspage {
+  display: flex; /* Inherit flex layout from the parent */
+  width: 100%; /* Ensure the link spans the entire width */
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit text color */
+}
+
+.book-item span {
+  flex: 1; /* Distribute the span elements equally */
+  text-align: left;
+  padding: 5px;
+}
+
+
+.link-to-detailspage{
+  text-decoration: none;
+  color: inherit;
+}

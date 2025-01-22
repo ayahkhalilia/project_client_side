@@ -31,11 +31,9 @@ const HomePage=()=>{
     }, []);
     if (loading) return <p>Loading books...</p>;
     if (error) return <p>{error}</p>;
-    const handleSearch = (query) => {
-        const filteredResults = data.filter((item) =>
-            item.toLowerCase().includes(query.toLowerCase())
-        );
-        setResults(filteredResults); // Update results state
+    const handleSearchResults = (results) => {
+        console.log('Search Results:', results); // Ensure results are coming
+        setBooks(results);
     };
     const userName="jayjay";//this is for test it need it from server
 
@@ -79,21 +77,34 @@ const HomePage=()=>{
                     </div> 
                 </header>
                 <div className='search-bar'>
-                        <SearchBar onSearch={handleSearch} />
+                        <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books"} onResults={handleSearchResults} />
                 </div> 
                 <div className="books-list">
-                {books.length > 0 ? (
-                    <ul>
+                  {books.length > 0 ? (
+                    <>
+                    <div className="list-header">
+                        <span className="header-item">Book ID</span>
+                        <span className="header-item">Title</span>
+                        <span className="header-item">Author</span>
+                        <span className="header-item">Category</span>
+                        <span className="header-item">Status</span>
+                        <span className="header-item">Total Copies</span>
+                        <span className="header-item">Available Copies</span>
+                    </div>
+                    <ul className='book-items'>
                         {books.map((book) => (
-                            <li key={book._id}>
-                                <strong>{book.title}</strong> {book.author} {book.category} {book.book_status} {book.total_copies} {book.available_copies}
+                            <li key={book._id} className='book-item'><Link to='/books/${book_id}' className='link-to-detailspage'>
+                                <span>{book.book_id}</span>   <span>{book.title}</span>   <span>{book.author}</span>   
+                                <span>{book.category}</span>   <span>{book.book_status}</span>   
+                                <span>{book.total_copies}</span>   <span>{book.available_copies}</span></Link>
                             </li>
                         ))}
                     </ul>
-                ) : (
+                    </>
+                  ) : (
                     <p>No books available</p>
-                )}
-            </div>
+                  )}
+                </div>
             </div>
  
         </div>
