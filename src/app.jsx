@@ -8,6 +8,7 @@ import BookRequestsPage from './pages/bookrequestspage.jsx';
 import BookDonationsPage from './pages/bookdonationspage.jsx';
 import RoomBookingPage from './pages/roombookingpage.jsx';
 import BookDetailsPage from './pages/bookdetailspage.jsx'
+import AddBookFormPage from './pages/addbookformpage.jsx';
 
 const App = () => {
     return (
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/book-donations" element={<BookDonationsPage />} />
             <Route path="/room-booking" element={<RoomBookingPage />} />
             <Route path='/books/:book_id' element={<BookDetailsPage />}/>
+            <Route path='/add-book-list' element={<AddBookFormPage/>}/>
         </Routes>
     );
 };

@@ -9,6 +9,24 @@ import SearchBar from '../components/searchbar.jsx';
 import '../index.css';
 
 const RoomBookingPage = () => {
+    const [studyrooms, setStudyrooms] = useState([]); // State to store books
+    const [loading, setLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null);
+    useEffect(() => {
+        const fetchStudyrooms = async () => {
+            try {
+                const response = await API.get('/api/studyrooms');
+                console.log('rooms from API:', response.data); // Check the IDs here
+                setStudyrooms(response.data);
+            } catch (err) {
+                setError('Failed to fetch rooms from the server');
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchStudyrooms();
+    }, []);
     const handleSearch = (query) => {
         const filteredResults = data.filter((item) =>
             item.toLowerCase().includes(query.toLowerCase())
@@ -59,6 +77,26 @@ const RoomBookingPage = () => {
                 <div className='search-bar'>
                         <SearchBar onSearch={handleSearch} />
                 </div> 
+                <div className="books-list">
+                    <Link to={"/add-book-list"}><LuSquarePlus /></Link>
+                        {studyrooms.length > 0 ? (
+                            <>
+                            <div className="list-header">
+                            <span className="header-item">Room ID</span>
+                            <span className="header-item">Customer Name</span>
+                            <span className="header-item">Number</span>
+                            </div>
+                            <ul className='book-items'>
+                                
+                              {studyrooms.map((room) => (
+                                 <li key={studyrooms.user_id} className='book-item'><Link to={`/studyrooms/${studyrooms.user_id}`} className='link-to-detailspage'>
+                                   <span>{room.user_id}</span>   <span>{room.username}</span>   <span>{room.user_number}</span></Link>
+                                 </li>
+                              ))}
+                            </ul>
+                            </>
+                        ) : (<p>No rooms available</p>)}
+                </div>
             </div>
  
         </div>

@@ -72,7 +72,7 @@ const userName="jayjay";//this is for test it need it from server
 
                 {book ? (
                 <div>
-                    <h1>{book.title}</h1>
+                    <h3>{book.title}</h3>
                     <img src={book.image_url} alt={book.title} style={{ width: '200px', height: '250px' }} />
                     <p><strong>Author:</strong> {book.author}</p>
                     <p><strong>Category:</strong> {book.category}</p>

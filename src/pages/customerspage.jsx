@@ -5,11 +5,31 @@ import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
 import { MdOutlineDoorFront } from "react-icons/md";
+import { LuSquarePlus } from "react-icons/lu";
+import { MdOutlineDelete } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import '../index.css';
 
 const CustomersPage = () => {
+    const [users, setUsers] = useState([]); // State to store books
+    const [loading, setLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null);
+    useEffect(() => {
+        const fetchCustomers = async () => {
+            try {
+                const response = await API.get('/api/users');
+                console.log('Users from API:', response.data); // Check the IDs here
+                setUsers(response.data);
+            } catch (err) {
+                setError('Failed to fetch users from the server');
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchCustomers();
+    }, []);
         const handleSearch = (query) => {
             const filteredResults = data.filter((item) =>
                 item.toLowerCase().includes(query.toLowerCase())
@@ -60,14 +80,29 @@ const CustomersPage = () => {
                 <div className='search-bar'>
                         <SearchBar onSearch={handleSearch} />
                 </div> 
-                <div className='customer-list'>
-                     <h3>Customer list</h3>
-                     <ul>
-                       {customers.map((customer,index)=>(
-                        <li key={index}>{customer}</li>
-                       ))}
-                     </ul>
-                </div>
+                <div className="books-list">
+                                    <Link to={"/add-book-list"}><LuSquarePlus /></Link>
+                                  {users.length > 0 ? (
+                
+                                    <>
+                                    <div className="list-header">
+                                        <span className="header-item">Customer ID</span>
+                                        <span className="header-item">Customer Name</span>
+                                        <span className="header-item">Number</span>
+                                    </div>
+                                    <ul className='book-items'>
+                
+                                        {users.map((user) => (
+                                            <li key={user.user_id} className='book-item'><Link to={`/users/${user.user_id}`} className='link-to-detailspage'>
+                                                <span>{user.user_id}</span>   <span>{user.username}</span>   <span>{user.user_number}</span></Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    </>
+                                  ) : (
+                                    <p>No customers available</p>
+                                  )}
+                    </div>
             </div>
             
             
