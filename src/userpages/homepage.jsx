@@ -11,7 +11,7 @@ import '../index.css';
 
 const UserHomePage=()=>{
     
-    
+
     const handleSearchResults = (results) => {
         console.log('Search Results:', results); // Ensure results are coming
         setBooks(results);
