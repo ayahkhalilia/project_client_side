@@ -32,7 +32,8 @@
     "electron": "33.3.1",
     "node-loader": "^2.1.0",
     "serve": "^14.2.4",
-    "style-loader": "^3.3.4"
+    "style-loader": "^3.3.4",
+    "@babel/plugin-proposal-private-property-in-object":"7.21.11"
   },
   "keywords": [],
   "author": {
