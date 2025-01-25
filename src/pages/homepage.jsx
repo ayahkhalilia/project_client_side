@@ -5,8 +5,6 @@ import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
 import { MdOutlineDoorFront } from "react-icons/md";
-import { LuSquarePlus } from "react-icons/lu";
-import { MdOutlineDelete } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import '../index.css';
@@ -21,38 +19,24 @@ const HomePage=()=>{
         const fetchBooks = async () => {
             try {
                 const response = await API.get('/api/books');
-                setBooks(response.data);
+                setBooks(response.data); // Assuming API sends an array of books
             } catch (err) {
                 setError('Failed to fetch books from the server');
             } finally {
                 setLoading(false);
             }
         };
-    
+
         fetchBooks();
     }, []);
-    
-
-    const handleDelete = async (book_id) => {
-        try {
-            console.log('Deleting book with ID:', book_id);
-            await API.delete(`/api/books/${book_id}`);
-            setBooks((prevBooks) => prevBooks.filter((book) => book.book_id !== book_id));
-            console.log(`Book with ID ${book_id} deleted successfully.`);
-        } catch (err) {
-            console.error(`Failed to delete book with ID ${book_id}:`, err);
-            setError('Failed to delete the book');
-        }
-    };
-  
     if (loading) return <p>Loading books...</p>;
     if (error) return <p>{error}</p>;
-
-    const handleSearchResults = (results) => {
-        console.log('Search Results:', results); // Ensure results are coming
-        setBooks(results);
+    const handleSearch = (query) => {
+        const filteredResults = data.filter((item) =>
+            item.toLowerCase().includes(query.toLowerCase())
+        );
+        setResults(filteredResults); // Update results state
     };
-    
     const userName="jayjay";//this is for test it need it from server
 
     return(
@@ -95,40 +79,21 @@ const HomePage=()=>{
                     </div> 
                 </header>
                 <div className='search-bar'>
-                        <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books"} onResults={handleSearchResults} />
+                        <SearchBar onSearch={handleSearch} />
                 </div> 
                 <div className="books-list">
-                    <Link to={"/add-book-list"}><LuSquarePlus /></Link>
-                  {books.length > 0 ? (
-
-                    <>
-                    <div className="list-header">
-                        <span className="header-item">Book ID</span>
-                        <span className="header-item">Title</span>
-                        <span className="header-item">Author</span>
-                        <span className="header-item">Category</span>
-                        <span className="header-item">Status</span>
-                        <span className="header-item">Total Copies</span>
-                        <span className="header-item">Available Copies</span>
-                    </div>
-                    <ul className='book-items'>
-
-                        {books.map((book,index) => (
-                            <li key={book.book_id || index} className='book-item'><Link to={`/books/${book.book_id}`} className='link-to-detailspage'>
-                                <span>{book.book_id}</span>   <span>{book.title}</span>   <span>{book.author}</span>   
-                                <span>{book.category}</span>   <span>{book.book_status}</span>   
-                                <span>{book.total_copies}</span>   <span>{book.available_copies}</span></Link>
-                                <MdOutlineDelete onClick={()=> handleDelete(book.book_id)} 
-                                                 style={{cursor: 'pointer',color:'red'}}
-                                />
+                {books.length > 0 ? (
+                    <ul>
+                        {books.map((book) => (
+                            <li key={book._id}>
+                                <strong>{book.title}</strong> by {book.author}
                             </li>
                         ))}
                     </ul>
-                    </>
-                  ) : (
+                ) : (
                     <p>No books available</p>
-                  )}
-                </div>
+                )}
+            </div>
             </div>
  
         </div>
