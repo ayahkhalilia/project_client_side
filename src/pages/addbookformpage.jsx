@@ -1,4 +1,4 @@
-import React, { useState,userName } from 'react';
+import React, { useState } from 'react';
 import API from '../axiosConfig'; 
 import {IoHomeOutline,IoSettingsOutline} from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
@@ -17,6 +17,7 @@ const AddBookFormPage = () => {
     const [category, setCategory] = useState('');
     const [photo, setPhoto] = useState(null);
     const navigate = useNavigate();
+    const userName="jayjay";//this is for test it need it from server
 
     const handleSubmit = async (e) => {
         e.preventDefault();
