@@ -21,7 +21,6 @@ const HomePage=()=>{
         const fetchBooks = async () => {
             try {
                 const response = await API.get('/api/books');
-                console.log('Books from API:', response.data); // Check the IDs here
                 setBooks(response.data);
             } catch (err) {
                 setError('Failed to fetch books from the server');
@@ -48,10 +47,12 @@ const HomePage=()=>{
   
     if (loading) return <p>Loading books...</p>;
     if (error) return <p>{error}</p>;
+
     const handleSearchResults = (results) => {
         console.log('Search Results:', results); // Ensure results are coming
         setBooks(results);
     };
+    
     const userName="jayjay";//this is for test it need it from server
 
     return(
