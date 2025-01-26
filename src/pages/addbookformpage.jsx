@@ -14,7 +14,7 @@ const AddBookFormPage = () => {
     const [author, setAuthor] = useState('');
     const [publicationYear, setPublicationYear] = useState('');
     const [category, setCategory] = useState('');
-    const [photo, setPhoto] = useState(null);
+    const [photo, setPhoto] = useState();
     const navigate = useNavigate();
     const userName = "jayjay"; // Temporary value for testing
 
