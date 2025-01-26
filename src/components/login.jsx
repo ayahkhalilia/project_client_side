@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios'; // Import Axios for API requests
+import API from '../axiosConfig'; 
 import '../index.css';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [userType, setUserType] = useState('customer'); // Default to 'customer'
+    const [userType, setUserType] = useState(''); // Default to 'customer'
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ const LoginPage = () => {
 
         try {
             // Send login credentials to the backend
-            const response = await axios.post('https://your-backend-url.com/api/users', {
+            const response = await API.post('/api/users', {
                 username,
                 password,
             });
