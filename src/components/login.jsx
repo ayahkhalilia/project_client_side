@@ -6,7 +6,6 @@ import '../index.css';
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [userType, setUserType] = useState(''); // Default to 'customer'
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -14,25 +13,24 @@ const LoginPage = () => {
         e.preventDefault();
 
         try {
-            // Send login credentials to the backend
-            const response = await API.post('/api/users', {
+            const response = await API.post('/api/users/login', {
                 username,
                 password,
             });
 
-            // If login is successful, navigate to the appropriate page based on the user type
             if (response.status === 200) {
-                const loggedInUser = response.data; // Assuming backend sends back user data, including user_type
-                if (loggedInUser.user_type === 'librarian') {
-                    navigate('/librarian-home');
-                } else {
-                    navigate('/customer-home');
+                const {userType}=response.data;
+                if(userType=='librarian'){
+                    navigate('/home');
+                }else if(userType=='customer'){
+                    navigate('/userhomepage');
+                }else {
+                    setError('unknown user type');
                 }
             }
         } catch (err) {
-            // Handle errors
             if (err.response && err.response.data) {
-                setError(err.response.data.error); // Backend error message
+                setError(err.response.data.error); 
             } else {
                 setError('An unexpected error occurred. Please try again.');
             }
@@ -66,18 +64,8 @@ const LoginPage = () => {
                             required
                         />
                     </div>
-                    <div className='form-group'>
-                        <label htmlFor='userType'>User Type</label>
-                        <select
-                            id='userType'
-                            value={userType}
-                            onChange={(e) => setUserType(e.target.value)}
-                        >
-                            <option value='customer'>Customer</option>
-                            <option value='librarian'>Librarian</option>
-                        </select>
-                    </div>
-                    {error && <p className="error-message">{error}</p>} {/* Display error message */}
+                  
+                    {error && <p className="error-message">{error}</p>} {}
                     <button type='submit'>Login</button>
                     <h3 className='dont-have-account'>Don't have an account?</h3>
                     <h3 className='sign-up'>
@@ -88,6 +76,5 @@ const LoginPage = () => {
         </div>
     );
 };
-
 
 export default LoginPage;
