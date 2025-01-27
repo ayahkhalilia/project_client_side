@@ -22,7 +22,7 @@ const ManageReturnBooks=()=>{
         const fetchBookBorrowins = async () => {
           try {
             console.log('Fetching borrowed books...');
-            const response = await API.get('/api/borrowings');
+            const response = await API.get('/api/books/borrowings');
             console.log('API Response:', response.data);
             const borrowed = response.data.filter(
               (borrowing) => borrowing.borrowing_status === 'borrowed'
