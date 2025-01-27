@@ -1,9 +1,11 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import {IoHomeOutline,IoSettingsOutline} from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
 import { MdOutlineDoorFront } from "react-icons/md";
+import { LuSquarePlus } from "react-icons/lu";
+import { GrUserManager } from "react-icons/gr";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import '../index.css';
@@ -58,6 +60,10 @@ const RoomBookingPage = () => {
                     <MdOutlineDoorFront /> Room Booking
                   </Link>
               </h3>
+              <h3><Link to="/managereturnbooks">
+                    <GrUserManager /> Manage return books
+                  </Link>
+              </h3>
             <div className='setting'><IoSettingsOutline /></div>
             </div>
 
@@ -104,3 +110,6 @@ const RoomBookingPage = () => {
 };
 
 export default RoomBookingPage;
+
+
+// // THE SAME PROBLEM IN CUSTOMERS LIST PAGE (THE LENGTH PROBLEM)

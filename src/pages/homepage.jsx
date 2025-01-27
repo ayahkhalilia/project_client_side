@@ -7,6 +7,7 @@ import { BiDonateHeart } from "react-icons/bi";
 import { MdOutlineDoorFront } from "react-icons/md";
 import { LuSquarePlus } from "react-icons/lu";
 import { MdOutlineDelete } from "react-icons/md";
+import { GrUserManager } from "react-icons/gr";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import '../index.css';
@@ -77,6 +78,10 @@ const HomePage=()=>{
                     <MdOutlineDoorFront /> Room Booking
                   </Link>
               </h3>
+              <h3><Link to="/managereturnbooks">
+                    <GrUserManager /> Manage return books
+                  </Link>
+              </h3>
             <div className='setting'><IoSettingsOutline /></div>
             </div>
 
@@ -135,3 +140,6 @@ const HomePage=()=>{
 };
 
 export default HomePage;
+
+
+// // HERE WE JUST NEED TO TEST IF EVERYTHING REALY WORKS GOOD- DELETE,EDITE IN DETAILS PAGE,CREATE

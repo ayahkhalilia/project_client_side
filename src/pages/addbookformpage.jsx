@@ -5,6 +5,7 @@ import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
 import { MdOutlineDoorFront } from "react-icons/md";
+import { GrUserManager } from "react-icons/gr";
 import AddButton from '../components/addbutton';
 import { useNavigate, Link } from 'react-router-dom';
 import '../index.css';
@@ -68,6 +69,10 @@ const AddBookFormPage = () => {
                 <h3>
                     <Link to="/room-booking">
                         <MdOutlineDoorFront /> Room Booking
+                    </Link>
+                </h3>
+                <h3><Link to="/managereturnbooks">
+                        <GrUserManager /> Manage return books
                     </Link>
                 </h3>
                 <div className='setting'>
@@ -149,3 +154,6 @@ const AddBookFormPage = () => {
 
 
 export default AddBookFormPage;
+
+
+// // the problem here it does not realy take the photo and save it in the backend's uplodes folder
