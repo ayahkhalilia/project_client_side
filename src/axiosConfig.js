@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// Base URL of your backend
 const API = axios.create({
-    baseURL: 'https://rebook-backend-ldmy.onrender.com', // Replace with your actual backend URL
+    baseURL: 'https://rebook-backend-ldmy.onrender.com',
     headers: {
         'Content-Type': 'application/json',
     },

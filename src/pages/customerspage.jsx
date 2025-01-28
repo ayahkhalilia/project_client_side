@@ -7,6 +7,7 @@ import { BiDonateHeart } from "react-icons/bi";
 import { MdOutlineDoorFront } from "react-icons/md";
 import { LuSquarePlus } from "react-icons/lu";
 import { MdOutlineDelete } from "react-icons/md";
+import { GrUserManager } from "react-icons/gr";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import '../index.css';
@@ -61,6 +62,10 @@ const CustomersPage = () => {
                     <MdOutlineDoorFront /> Room Booking
                   </Link>
               </h3>
+              <h3><Link to="/managereturnbooks">
+                    <GrUserManager /> Manage return books
+                  </Link>
+              </h3>
             <div className='setting'><IoSettingsOutline /></div>
             </div>
 
@@ -111,3 +116,6 @@ const CustomersPage = () => {
 };
 
 export default CustomersPage;
+
+
+// // the problem here when i put to print the users if the length>0 it prints 'no customers available'

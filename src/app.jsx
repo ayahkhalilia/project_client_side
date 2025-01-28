@@ -9,6 +9,8 @@ import BookDonationsPage from './pages/bookdonationspage.jsx';
 import RoomBookingPage from './pages/roombookingpage.jsx';
 import BookDetailsPage from './pages/bookdetailspage.jsx'
 import AddBookFormPage from './pages/addbookformpage.jsx';
+import ManageReturnBooks from './pages/managereturnbookspage.jsx'
+import UserHomePage from './userpages/homepage.jsx'
 
 const App = () => {
     return (
@@ -22,6 +24,8 @@ const App = () => {
             <Route path="/room-booking" element={<RoomBookingPage />} />
             <Route path='/books/:book_id' element={<BookDetailsPage />}/>
             <Route path='/add-book-list' element={<AddBookFormPage/>}/>
+            <Route path='/userhomepage' element={<UserHomePage/>}/>
+            <Route path='/managereturnbooks' element={<ManageReturnBooks/>}/>
         </Routes>
     );
 };
