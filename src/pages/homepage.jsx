@@ -10,35 +10,62 @@ import { MdOutlineDelete } from "react-icons/md";
 import { GrUserManager } from "react-icons/gr";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
+import { useAuth } from '../context/AuthContext'; 
 import '../index.css';
-
+//
+//u need to fix the  fetchs so it can fetch with auth 
+//u need to check every func that it still works or not then fix it
+//
 const HomePage=()=>{
     const [books, setBooks] = useState([]); // State to store books
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error state
-
+    const { token } = useAuth();
     // Fetch books from the server
     useEffect(() => {
         const fetchBooks = async () => {
+            if (!token) {
+                setError('No authentication token found');
+                setLoading(false);
+                return;
+            }
+
             try {
-                const response = await API.get('/api/books');
+                const response = await API.get('/api/books', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
                 console.log('Books from API:', response.data); // Check the IDs here
                 setBooks(response.data);
             } catch (err) {
                 setError('Failed to fetch books from the server');
+                console.error('Error fetching books:', err);
             } finally {
                 setLoading(false);
             }
         };
-    
+
         fetchBooks();
-    }, []);
+    }, [token]);
+    
+    
     
 
     const handleDelete = async (book_id) => {
+        if (!token) {
+            setError('No authentication token found');
+            return;
+        }
+    
         try {
             console.log('Deleting book with ID:', book_id);
-            await API.delete(`/api/books/${book_id}`);
+            await API.delete(`/api/books/${book_id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+    
             setBooks((prevBooks) => prevBooks.filter((book) => book.book_id !== book_id));
             console.log(`Book with ID ${book_id} deleted successfully.`);
         } catch (err) {
@@ -46,6 +73,7 @@ const HomePage=()=>{
             setError('Failed to delete the book');
         }
     };
+    
   
     if (loading) return <p>Loading books...</p>;
     if (error) return <p>{error}</p>;
@@ -142,4 +170,4 @@ const HomePage=()=>{
 export default HomePage;
 
 
-// // HERE WE JUST NEED TO TEST IF EVERYTHING REALY WORKS GOOD- DELETE,EDITE IN DETAILS PAGE,CREATE
+// // HERE WE JUST NEED TO TEST IF EVERYTHING REALY WORKS GOOD- DELETE,EDITE IN DETAILS PAGE,

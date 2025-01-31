@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Use Context instead of localStorage
 import API from '../axiosConfig'; 
 import '../index.css';
 
@@ -8,32 +9,29 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth(); 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await API.post('/api/users/login', {
-                username,
-                password,
-            });
+            const response = await API.post('/api/users/login', { username, password });
 
             if (response.status === 200) {
-                const {userType}=response.data;
-                if(userType=='librarian'){
+                const { userType, token, username } = response.data;
+
+                login({ username, userType, token });
+
+                if (userType === 'librarian') {
                     navigate('/home');
-                }else if(userType=='customer'){
+                } else if (userType === 'customer') {
                     navigate('/userhomepage');
-                }else {
-                    setError('unknown user type');
+                } else {
+                    setError('Unknown user type');
                 }
             }
         } catch (err) {
-            if (err.response && err.response.data) {
-                setError(err.response.data.error); 
-            } else {
-                setError('An unexpected error occurred. Please try again.');
-            }
+            setError(err.response?.data?.error || 'An unexpected error occurred.');
         }
     };
 
@@ -65,7 +63,7 @@ const LoginPage = () => {
                         />
                     </div>
                   
-                    {error && <p className="error-message">{error}</p>} {}
+                    {error && <p className="error-message">{error}</p>}
                     <button type='submit'>Login</button>
                     <h3 className='dont-have-account'>Don't have an account?</h3>
                     <h3 className='sign-up'>

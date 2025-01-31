@@ -8,6 +8,7 @@ import { MdOutlineDoorFront } from "react-icons/md";
 import { GrUserManager } from "react-icons/gr";
 import AddButton from '../components/addbutton';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; 
 import '../index.css';
 
 const AddBookFormPage = () => {
@@ -18,30 +19,44 @@ const AddBookFormPage = () => {
     const [photo, setPhoto] = useState();
     const navigate = useNavigate();
     const userName = "jayjay"; // Temporary value for testing
+    const [loading, setLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null);
+    const { token } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Create FormData object to send file and other book details
+        
+        if (!token) {
+            setError('No authentication token found');
+            setLoading(false);
+            return;
+        }
+    
         const formData = new FormData();
         formData.append('title', title);
         formData.append('author', author);
         formData.append('publication_year', publicationYear);
         formData.append('category', category);
         if (photo) {
-            formData.append('book_photo', photo); // Attach photo if available
+            formData.append('book_photo', photo);
         }
-
+    
         try {
-            // Send the FormData to the backend
-            const response = await API.post('/api/books', formData);
+            const response = await API.post('/api/books', formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+    
             alert(response.data.message || 'Book added successfully!');
-            navigate('/home'); // Redirect to the homepage
+            navigate('/home');
         } catch (error) {
             console.error('Error adding book:', error.response?.data || error.message);
             alert('Failed to add the book. Please try again.');
         }
     };
+    
 
     return (
         <div className='nav-bar'>
