@@ -58,10 +58,6 @@ const CustomersPage = () => {
                     <BiDonateHeart /> Book Donations
                   </Link>
               </h3>
-              <h3><Link to="/room-booking">
-                    <MdOutlineDoorFront /> Room Booking
-                  </Link>
-              </h3>
               <h3><Link to="/managereturnbooks">
                     <GrUserManager /> Manage return books
                   </Link>

@@ -5,22 +5,20 @@ import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
-import { MdOutlineDoorFront } from "react-icons/md";
 import { GrUserManager } from "react-icons/gr";
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; 
 import '../index.css';
 
-const BookDetailsPage = () => {
-    const [book, setBook] = useState(null);
-    const [loading, setLoading] = useState(true); 
-    const [error, setError] = useState(null);
-    const [isEditing, setIsEditing] = useState(false); 
+const BorrowRequestDetailsPage = () => {
+    const [bookborrowings, setBookborrowings] = useState([]);
     const [formData, setFormData] = useState({}); 
     const [imageFile, setImageFile] = useState(null);
-    const { token, user } = useAuth(); 
-    const { book_id } = useParams();
-    const userName = "jayjay"; // This should ideally come from `useAuth`
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { token } = useAuth();
+    const userName = "jayjay";
+    const { borrowing_id } = useParams();
 
     useEffect(() => {
         const fetchBookDetails = async () => {
@@ -225,7 +223,7 @@ const BookDetailsPage = () => {
                     </div>
                 ) : (
                     <div>
-                        <h3>{book.title}</h3>
+                        <h3>{bookborrowings.title}</h3>
                         {book.image_url ? (
                             <img src={book.image_url} alt={book.title} style={{ width: '200px', height: '250px' }} />
                         ) : (
@@ -243,4 +241,4 @@ const BookDetailsPage = () => {
     );
 };
 
-export default BookDetailsPage;
+export default BorrowRequestDetailsPage;
