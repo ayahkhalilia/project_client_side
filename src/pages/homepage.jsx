@@ -12,16 +12,13 @@ import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import { useAuth } from '../context/AuthContext'; 
 import '../index.css';
-//
-//u need to fix the  fetchs so it can fetch with auth 
-//u need to check every func that it still works or not then fix it
-//
+
 const HomePage=()=>{
-    const [books, setBooks] = useState([]); // State to store books
-    const [loading, setLoading] = useState(true); // Loading state
-    const [error, setError] = useState(null); // Error state
+    const [books, setBooks] = useState([]); 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); 
     const { token } = useAuth();
-    // Fetch books from the server
+ 
     useEffect(() => {
         const fetchBooks = async () => {
             if (!token) {
@@ -36,7 +33,7 @@ const HomePage=()=>{
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                console.log('Books from API:', response.data); // Check the IDs here
+                console.log('Books from API:', response.data); 
                 setBooks(response.data);
             } catch (err) {
                 setError('Failed to fetch books from the server');
@@ -48,8 +45,8 @@ const HomePage=()=>{
 
         fetchBooks();
     }, [token]);
-    
-    
+
+ 
     
 
     const handleDelete = async (book_id) => {
@@ -78,7 +75,7 @@ const HomePage=()=>{
     if (loading) return <p>Loading books...</p>;
     if (error) return <p>{error}</p>;
     const handleSearchResults = (results) => {
-        console.log('Search Results:', results); // Ensure results are coming
+        console.log('Search Results:', results);
         setBooks(results);
     };
     const userName="jayjay";//this is for test it need it from server

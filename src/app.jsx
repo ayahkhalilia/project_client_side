@@ -6,6 +6,7 @@ import SignupPage from './components/signup.jsx';
 import CustomersPage from './pages/customerspage.jsx';
 import BookRequestsPage from './pages/bookrequestspage.jsx';
 import BookDonationsPage from './pages/bookdonationspage.jsx';
+import DonationRequestDetailsPage from './pages/donationrequestdetails.jsx';
 import BookDetailsPage from './pages/bookdetailspage.jsx'
 import AddBookFormPage from './pages/addbookformpage.jsx';
 import ManageReturnBooks from './pages/managereturnbookspage.jsx'
@@ -27,10 +28,12 @@ const App = () => {
             <Route path="/customers" element={<CustomersPage />} />
             <Route path="/book-requests" element={<BookRequestsPage />} />
             <Route path="/book-donations" element={<BookDonationsPage />} />
+            
+            <Route path='/books/books-donations/:donation_id' element={<DonationRequestDetailsPage/>}/> 
             <Route path='/books/:book_id' element={<BookDetailsPage />}/>
             <Route path='/add-book-list' element={<AddBookFormPage/>}/>
             <Route path='/managereturnbooks' element={<ManageReturnBooks/>}/>
-            <Route path='/books/borrow-requests/:_id' element={<BorrowRequestDetailsPage/>}/>
+            <Route path='/books/borrow-requests/:borrowing_id' element={<BorrowRequestDetailsPage/>}/>
 
 
             <Route path='/userhomepage' element={<UserHomePage/>}/>

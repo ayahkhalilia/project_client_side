@@ -80,7 +80,7 @@ const BookRequestsPage = () => {
                             </div>
                             <ul className="book-items">
                                 {bookborrowings.map((request, index) => (
-                                    <li key={request._id || index} className="book-item"><Link to={`/books/borrow-requests/${request.borrowing_id}`} className='link-to-detailspage'>
+                                    <li key={request.borrowing_id_id || index} className="book-item"><Link to={`/books/borrow-requests/${request.borrowing_id}`} className='link-to-detailspage'>
                                         <span>{request.borrowing_id}</span>
                                         <span>{request.book_id?.title || 'N/A'}</span>
                                         <span>{request.book_id?.author || 'N/A'}</span>

@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react';
+import API from '../axiosConfig.js';
 import axios from 'axios';
 import {IoHomeOutline,IoSettingsOutline} from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
@@ -8,6 +9,7 @@ import { MdOutlineDoorFront } from "react-icons/md";
 import { LuSquarePlus } from "react-icons/lu";
 import { MdOutlineDelete } from "react-icons/md";
 import { GrUserManager } from "react-icons/gr";
+import { useAuth } from '../context/AuthContext'; 
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import '../index.css';
@@ -15,22 +17,41 @@ import '../index.css';
 const CustomersPage = () => {
     const [users, setUsers] = useState([]); // State to store books
     const [loading, setLoading] = useState(true); // Loading state
+    const { token } = useAuth();
     const [error, setError] = useState(null);
     useEffect(() => {
         const fetchCustomers = async () => {
+            if (!token) {
+                setError('No authentication token found');
+                setLoading(false);
+                return;
+            }
+
             try {
-                const response = await API.get('/api/users');
-                console.log('Users from API:', response.data); // Check the IDs here
+                const response = await API.get('/api/users', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                console.log('Customers from API:', response.data); // Check the IDs here
                 setUsers(response.data);
             } catch (err) {
-                setError('Failed to fetch users from the server');
+                setError('Failed to fetch customers from the server');
+                console.error('Error fetching customers:', err);
             } finally {
                 setLoading(false);
             }
         };
-    
+
         fetchCustomers();
-    }, []);
+    }, [token]);
+
+    
+  
+    if (loading) return <p>Loading customers...</p>;
+    if (error) return <p>{error}</p>;
+
+
         const handleSearch = (query) => {
             const filteredResults = data.filter((item) =>
                 item.toLowerCase().includes(query.toLowerCase())
@@ -38,7 +59,7 @@ const CustomersPage = () => {
             setResults(filteredResults); // Update results state
         };
         const userName="jayjay";//this is for test it need it from server
-        const customers=["Alice", "Bob", "Charlie", "Diana"];
+
     return(
         <div className='nav-bar'>
             <div className='bar-rec'>
@@ -93,9 +114,9 @@ const CustomersPage = () => {
                                     </div>
                                     <ul className='book-items'>
                 
-                                        {users.map((user) => (
-                                            <li key={user.user_id} className='book-item'><Link to={`/users/${user.user_id}`} className='link-to-detailspage'>
-                                                <span>{user.user_id}</span>   <span>{user.username}</span>   <span>{user.user_number}</span></Link>
+                                        {users.map((user,index) => (
+                                            <li key={user.user_id || index} className='book-item'>
+                                                <span>{user.user_id}</span>   <span>{user.username}</span>   <span>{user.user_number}</span>
                                             </li>
                                         ))}
                                     </ul>
