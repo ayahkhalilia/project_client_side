@@ -18,8 +18,18 @@ const BorrowedBooksPage=()=>{
 
     useEffect(() => {
         const fetchBorrowedBooks = async () => {
+            if (!token) {
+                setError('No authentication token found');
+                setLoading(false);
+                return;
+            }
+
             try {
-                const response = await API.get('/api/books/borrowings');
+                const response = await API.get('/api/books/my-borrowings', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
                 console.log('Books from API:', response.data); 
                 setBookBorrowings(response.data);
             } catch (err) {
@@ -30,7 +40,7 @@ const BorrowedBooksPage=()=>{
         };
     
         fetchBorrowedBooks();
-    }, []);
+    }, [token]);
     
 
     const handleSearchResults = (results) => {
@@ -71,31 +81,33 @@ const BorrowedBooksPage=()=>{
                     </div> 
                 </header>
                 <div className='search-bar'>
-                        <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books/borrowings"} onResults={handleSearchResults} />
+                    <SearchBar apiEndpoint="https://rebook-backend-ldmy.onrender.com/api/books" />
                 </div> 
-
+                
                 <div className="books-list">
                     {bookborrowings.length > 0 ? (
-                
-                     <>
-                      <div className="list-header">
-                        <span className="header-item">Borrow ID</span>
-                        <span className="header-item">BookID</span>
-                        <span className="header-item">Borrowed Date</span>
-                        <span className="header-item">Due date</span>
-                       </div>
-                       <ul className='book-items'>
-                          {bookborrowings.map((bookborrow,index) => (
-                            <li key={bookborrow.borrowing_id || index} className='book-item'><Link to={`/books/${bookborrow.borrowing_id}`} className='link-to-detailspage'>
-                              <span>{bookborrow.borrowing_id}</span>   <span>{bookborrow.book_id}</span>  
-                              <span>{bookborrow.borrow_date}</span>   <span>{bookborrow.due_date}</span>   </Link>
-                            </li>
-                           ))}
-                        </ul>
-                     </>
-                    ) : (<p>No books available</p>)}
+                        <>
+                            <div className="list-header">
+                                <span className="header-item">Borrowing ID</span>
+                                <span className="header-item">Book Title</span>
+                                <span className="header-item">Author</span>
+                                <span className="header-item">Status</span>
+                            </div>
+                            <ul className="book-items">
+                                {bookborrowings.map((borrowed, index) => (
+                                    <li key={borrowed.borrowing_id_id || index} className="book-item"><Link to={`/books/my-borrowings/${borrowed.borrowing_id}`} className='link-to-detailspage'>
+                                        <span>{borrowed.borrowing_id}</span>
+                                        <span>{borrowed.book_id?.title || 'N/A'}</span>
+                                        <span>{borrowed.book_id?.author || 'N/A'}</span>
+                                        <span>{borrowed.borrowing_status}</span></Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    ) : (
+                        <p>No borrowed books found.</p>
+                    )}
                 </div>
-
             </div>
  
         </div>

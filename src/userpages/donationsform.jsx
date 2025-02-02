@@ -18,8 +18,18 @@ const DonationsFormPage=()=>{
 
     useEffect(() => {
         const fetchBooks = async () => {
+            if (!token) {
+                setError('No authentication token found');
+                setLoading(false);
+                return;
+            }
+
             try {
-                const response = await API.get('/api/books');
+                const response = await API.get('/api/books', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
                 console.log('Books from API:', response.data); 
                 setBooks(response.data);
             } catch (err) {
@@ -30,7 +40,7 @@ const DonationsFormPage=()=>{
         };
     
         fetchBooks();
-    }, []);
+    }, [token]);
     
 
     const handleSearchResults = (results) => {
