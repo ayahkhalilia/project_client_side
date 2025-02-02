@@ -4,15 +4,17 @@ import {IoHomeOutline,IoSettingsOutline} from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
-import { MdOutlineDoorFront } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
+import { useAuth } from '../context/AuthContext'; 
 import '../index.css';
 
 const BorrowedBooksPage=()=>{
     const [bookborrowings, setBookBorrowings] = useState([]);
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null); 
+    const { username } = useAuth();
+    const { token } = useAuth();
 
     useEffect(() => {
         const fetchBorrowedBooks = async () => {
@@ -35,7 +37,6 @@ const BorrowedBooksPage=()=>{
         console.log('Search Results:', results);
         setBookBorrowings(results);
     };
-    const userName="jayjay";//this is for test it need it from server
 
     return(
         <div className='nav-bar'>
@@ -45,7 +46,7 @@ const BorrowedBooksPage=()=>{
                   </Link> 
               </h3>
               <h3><Link to="/donate-books-userpages">
-                    <LuUsersRound /> Donate Books
+                    <BiDonateHeart /> Donate Books
                   </Link>
               </h3>
               <h3><Link to="/borrowed-booksuserpages">
@@ -66,7 +67,7 @@ const BorrowedBooksPage=()=>{
                             src='#'
                             className='profile-pic'
                         />
-                        <span>Hi,{userName}</span>
+                        <span>Hi,{username}</span>
                     </div> 
                 </header>
                 <div className='search-bar'>

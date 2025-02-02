@@ -14,7 +14,7 @@ const DonationRequestDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { token } = useAuth();
-    const userName = "jayjay";
+    const { username } = useAuth();
     const { donation_id } = useParams();
 
     useEffect(() => {
@@ -110,7 +110,7 @@ const DonationRequestDetailsPage = () => {
                     <h3 className='homepage'>Donation Request Details</h3>
                     <div className='user-info'>
                         <img src='#' className='profile-pic' alt='Profile' />
-                        <span>Hi, {userName}</span>
+                        <span>Hi, {username}</span>
                     </div>
                 </header>
 

@@ -15,7 +15,7 @@ const BookRequestsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { token } = useAuth();
-    const userName = "jayjay"; // Temporary placeholder
+    const { username } = useAuth();
 
     useEffect(() => {
         const fetchBorrowRequests = async () => {
@@ -61,7 +61,7 @@ const BookRequestsPage = () => {
                     <h3 className='homepage'>Book Requests</h3>        
                     <div className='user-info'>
                         <img src='#' className='profile-pic' alt="Profile" />
-                        <span>Hi, {userName}</span>
+                        <span>Hi, {username}</span>
                     </div> 
                 </header>
                 <div className='search-bar'>

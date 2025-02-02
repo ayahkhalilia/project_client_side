@@ -18,7 +18,10 @@ const HomePage=()=>{
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null); 
     const { token } = useAuth();
- 
+    const { username } = useAuth();
+
+   // const userName = authState?.username;
+    
     useEffect(() => {
         const fetchBooks = async () => {
             if (!token) {
@@ -78,7 +81,7 @@ const HomePage=()=>{
         console.log('Search Results:', results);
         setBooks(results);
     };
-    const userName="jayjay";//this is for test it need it from server
+ //   const userName="jayjay";//this is for test it need it from server
 
     return(
         <div className='nav-bar'>
@@ -116,7 +119,7 @@ const HomePage=()=>{
                             src='#'
                             className='profile-pic'
                         />
-                        <span>Hi,{userName}</span>
+                        <span>Hi,{username}</span>
                     </div> 
                 </header>
                 <div className='search-bar'>

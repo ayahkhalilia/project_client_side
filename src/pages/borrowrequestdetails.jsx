@@ -14,8 +14,8 @@ const BorrowRequestDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { token } = useAuth();
-    const userName = "jayjay";
     const { borrowing_id } = useParams();
+    const { username } = useAuth();
 
     useEffect(() => {
         const fetchRequestDetails = async () => {
@@ -106,7 +106,7 @@ const BorrowRequestDetailsPage = () => {
                     <h3 className='homepage'>Borrow Request Details</h3>
                     <div className='user-info'>
                         <img src='#' className='profile-pic' alt='Profile' />
-                        <span>Hi, {userName}</span>
+                        <span>Hi, {username}</span>
                     </div>
                 </header>
 

@@ -16,6 +16,7 @@ const BookDonationsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { token } = useAuth(); 
+    const { username } = useAuth();
 
     useEffect(() => {
         const fetchPendingDonations = async () => {
@@ -51,7 +52,6 @@ const BookDonationsPage = () => {
     };
 
 
-    const userName = "jayjay"; // This is for test, it should come from server or context
 
     return (
         <div className='nav-bar'>
@@ -69,7 +69,7 @@ const BookDonationsPage = () => {
                     <h3 className='homepage'>Donation Requests</h3>
                     <div className='user-info'>
                         <img src='#' className='profile-pic' alt="profile" />
-                        <span>Hi, {userName}</span>
+                        <span>Hi, {username}</span>
                     </div>
                 </header>
                 <div className='search-bar'>

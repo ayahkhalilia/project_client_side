@@ -4,17 +4,17 @@ import {IoHomeOutline,IoSettingsOutline} from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
-import { MdOutlineDoorFront } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import { useAuth } from '../context/AuthContext'; 
 import '../index.css';
 
 const UserHomePage=()=>{
-    const [books, setBooks] = useState([]); // State to store books
-    const [loading, setLoading] = useState(true); // Loading state
-    const [error, setError] = useState(null); // Error state
+    const [books, setBooks] = useState([]);
+    const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(null); 
     const { token } = useAuth();
+    const { username } = useAuth();
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -48,7 +48,6 @@ const UserHomePage=()=>{
         console.log('Search Results:', results); // Ensure results are coming
         setBooks(results);
     };
-    const userName="jayjay";//this is for test it need it from server
 
     return(
         <div className='nav-bar'>
@@ -58,7 +57,7 @@ const UserHomePage=()=>{
                   </Link> 
               </h3>
               <h3><Link to="/donate-books-userpages">
-                    <LuUsersRound /> Donate Books
+                    <BiDonateHeart /> Donate Books
                   </Link>
               </h3>
               <h3><Link to="/borrowed-books-userpages">
@@ -79,7 +78,7 @@ const UserHomePage=()=>{
                             src='#'
                             className='profile-pic'
                         />
-                        <span>Hi,{userName}</span>
+                        <span>Hi,{username}</span>
                     </div> 
                 </header>
                 <div className='search-bar'>

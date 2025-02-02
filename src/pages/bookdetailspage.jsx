@@ -20,7 +20,7 @@ const BookDetailsPage = () => {
     const [imageFile, setImageFile] = useState(null);
     const { token, user } = useAuth(); 
     const { book_id } = useParams();
-    const userName = "jayjay"; // This should ideally come from `useAuth`
+    const { username } = useAuth();
 
     useEffect(() => {
         const fetchBookDetails = async () => {
@@ -139,7 +139,7 @@ const BookDetailsPage = () => {
                             className='profile-pic'
                             alt='Profile'
                         />
-                        <span>Hi, {userName}</span>
+                        <span>Hi, {username}</span>
                     </div>
                 </header>
                 <div>

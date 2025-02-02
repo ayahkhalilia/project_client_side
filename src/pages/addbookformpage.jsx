@@ -22,6 +22,7 @@ const AddBookFormPage = () => {
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null);
     const { token } = useAuth();
+    const { username } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -95,7 +96,7 @@ const AddBookFormPage = () => {
                     <h3 className='homepage'>Add Book Form</h3>
                     <div className='user-info'>
                         <img src='#' className='profile-pic' alt="Profile" />
-                        <span>Hi, {userName}</span>
+                        <span>Hi, {username}</span>
                     </div>
                 </header>
 
@@ -127,12 +128,12 @@ const AddBookFormPage = () => {
                                 value={publicationYear}
                                 onChange={(e) => {
                                     const year = e.target.value;
-                                    if (year.length <= 4 ) { // Limit input to 4 digits
+                                    if (year.length <= 4 ) { 
                                         setPublicationYear(year);
                                     }
                                 }}
-                                min="1900" // Optional: Adjust the minimum year
-                                max={new Date().getFullYear()} // Optional: Restrict to the current year or earlier
+                                min="1900"
+                                max={new Date().getFullYear()} 
                                 placeholder="e.g., 2023"
                                 required
                             />

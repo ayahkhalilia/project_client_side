@@ -15,7 +15,7 @@ const ManageReturnBooks = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { token } = useAuth();
-    const userName = "jayjay"; // Temporary, should come from AuthContext
+    const { username } = useAuth();
 
     useEffect(() => {
         const fetchBookBorrowings = async () => {
@@ -65,7 +65,7 @@ const ManageReturnBooks = () => {
                     <h3 className='homepage'>Manage return books</h3>
                     <div className='user-info'>
                         <img src='#' className='profile-pic' alt='Profile' />
-                        <span>Hi, {userName}</span>
+                        <span>Hi, {username}</span>
                     </div>
                 </header>
                 <div className='search-bar'>

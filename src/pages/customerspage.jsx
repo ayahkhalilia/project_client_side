@@ -15,9 +15,11 @@ import SearchBar from '../components/searchbar.jsx';
 import '../index.css';
 
 const CustomersPage = () => {
-    const [users, setUsers] = useState([]); // State to store books
-    const [loading, setLoading] = useState(true); // Loading state
+    const [users, setUsers] = useState([]); 
+    const [loading, setLoading] = useState(true); 
     const { token } = useAuth();
+    const { username } = useAuth();
+    
     const [error, setError] = useState(null);
     useEffect(() => {
         const fetchCustomers = async () => {
@@ -58,7 +60,6 @@ const CustomersPage = () => {
             );
             setResults(filteredResults); // Update results state
         };
-        const userName="jayjay";//this is for test it need it from server
 
     return(
         <div className='nav-bar'>
@@ -96,7 +97,7 @@ const CustomersPage = () => {
                             src='#'
                             className='profile-pic'
                         />
-                        <span>Hi,{userName}</span>
+                        <span>Hi,{username}</span>
                     </div> 
                 </header>
                 <div className='search-bar'>
