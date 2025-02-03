@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-const SearchBar = ({apiEndpoint, onResults}) => {
+
+const SearchBar = ({ apiEndpoint, onResults }) => {
     const [query, setQuery] = useState("");
 
     const handleInputChange = (e) => {
@@ -8,12 +9,20 @@ const SearchBar = ({apiEndpoint, onResults}) => {
     };
 
     const handleSearch = async () => {
+        if (query.trim() === "") {
+            // If the query is empty, do nothing
+            return;
+        }
+
         try {
-            const response = await axios.get(`${apiEndpoint}/${query}`); // Pass query as book_id
-            onResults([response.data]); // Ensure results are in an array
+            // Make sure to send the query as a query parameter
+            const response = await axios.get(`${apiEndpoint}?query=${query}`);
+
+            // Assuming response.data is the list of users you want to pass to the parent
+            onResults(response.data);  // Pass the results directly
         } catch (error) {
-            console.error(`Error fetching data:`, error);
-        }    
+            console.error("Error fetching data:", error);
+        }
     };
 
     return (
@@ -24,7 +33,7 @@ const SearchBar = ({apiEndpoint, onResults}) => {
                 value={query}
                 onChange={handleInputChange}
             />
-            <button onClick={handleSearch}>Search</button> {/* Trigger search */}
+            <button onClick={handleSearch}>Search</button>
         </div>
     );
 };

@@ -54,12 +54,10 @@ const CustomersPage = () => {
     if (error) return <p>{error}</p>;
 
 
-        const handleSearch = (query) => {
-            const filteredResults = data.filter((item) =>
-                item.toLowerCase().includes(query.toLowerCase())
-            );
-            setResults(filteredResults); // Update results state
-        };
+    const handleSearchResults = (results) => {
+        console.log('Search Results:', results);
+        setBooks(results);
+    };
 
     return(
         <div className='nav-bar'>
@@ -101,31 +99,28 @@ const CustomersPage = () => {
                     </div> 
                 </header>
                 <div className='search-bar'>
-                        <SearchBar onSearch={handleSearch} />
+                     <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/users"} onResults={handleSearchResults} />
+
                 </div> 
                 <div className="books-list">
-                                    <Link to={"/add-book-list"}><LuSquarePlus /></Link>
-                                  {users.length > 0 ? (
+                        {users.length > 0 ? (
                 
-                                    <>
-                                    <div className="list-header">
-                                        <span className="header-item">Customer ID</span>
-                                        <span className="header-item">Customer Name</span>
-                                        <span className="header-item">Number</span>
-                                    </div>
-                                    <ul className='book-items'>
-                
-                                        {users.map((user,index) => (
-                                            <li key={user.user_id || index} className='book-item'>
-                                                <span>{user.user_id}</span>   <span>{user.username}</span>   <span>{user.user_number}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    </>
-                                  ) : (
-                                    <p>No customers available</p>
-                                  )}
-                    </div>
+                         <>
+                          <div className="list-header">
+                            <span className="header-item">Customer ID</span>
+                            <span className="header-item">Customer Name</span>
+                            <span className="header-item">Number</span>
+                          </div>
+                          <ul className='book-items'>
+                            {users.map((user,index) => (
+                                <li key={user.user_id || index} className='book-item'>
+                                    <span>{user.user_id}</span>   <span>{user.username}</span>   <span>{user.user_number}</span>
+                                </li>
+                            ))}
+                          </ul>
+                         </>
+                        ) : (<p>No customers available</p>)}
+                </div>
             </div>
             
             

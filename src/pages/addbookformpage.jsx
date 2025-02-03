@@ -18,8 +18,7 @@ const AddBookFormPage = () => {
     const [category, setCategory] = useState('');
     const [photo, setPhoto] = useState();
     const navigate = useNavigate();
-    const userName = "jayjay"; // Temporary value for testing
-    const [loading, setLoading] = useState(true); // Loading state
+    const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null);
     const { token } = useAuth();
     const { username } = useAuth();

@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; // Use Context instead of localStorage
 import API from '../axiosConfig'; 
-import '../index.css';
+import '../index.css'; // Assuming you have a separate CSS file for styling
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { login } = useAuth(); 
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,8 +18,7 @@ const LoginPage = () => {
             const response = await API.post('/api/users/login', { username, password });
 
             if (response.status === 200) {
-                const { userType, token, username } = response.data;
-
+                const { userType, token } = response.data;
                 login({ username, userType, token });
 
                 if (userType === 'librarian') {
@@ -36,39 +35,43 @@ const LoginPage = () => {
     };
 
     return (
-        <div className='login-container'>
-            <div className='small-rec-login-signup'>
-                <h1>Login</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className='form-group'>
-                        <label htmlFor='username'>Username</label>
+        <div className="login-page">
+            <div className="login-form-container">
+                <h1 className="login-heading">Login</h1>
+                <form onSubmit={handleSubmit} className="login-form">
+                    <div className="input-group">
+                        <label htmlFor="username" className="input-label">Username</label>
                         <input
-                            type='text'
-                            id='username'
+                            type="text"
+                            id="username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            placeholder='Username'
+                            placeholder="Enter your username"
+                            className="input-field"
                             required
                         />
                     </div>
-                    <div className='form-group'>
-                        <label htmlFor='password'>Password</label>
+
+                    <div className="input-group">
+                        <label htmlFor="password" className="input-label">Password</label>
                         <input
-                            type='password'
-                            id='password'
+                            type="password"
+                            id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder='Password'
+                            placeholder="Enter your password"
+                            className="input-field"
                             required
                         />
                     </div>
-                  
+
                     {error && <p className="error-message">{error}</p>}
-                    <button type='submit'>Login</button>
-                    <h3 className='dont-have-account'>Don't have an account?</h3>
-                    <h3 className='sign-up'>
-                        <Link to="/signup">Signup</Link>
-                    </h3>
+                    <button type="submit" className="login-button">Login</button>
+
+                    <div className="signup-prompt">
+                        <p>Don't have an account?</p>
+                        <Link to="/signup" className="signup-link">Sign up</Link>
+                    </div>
                 </form>
             </div>
         </div>

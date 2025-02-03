@@ -25,7 +25,7 @@ const UserHomePage=()=>{
             }
 
             try {
-                const response = await API.get('/api/books', {
+                const response = await API.get('/api/books/customer', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -82,7 +82,7 @@ const UserHomePage=()=>{
                     </div> 
                 </header>
                 <div className='search-bar'>
-                        <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books"} onResults={handleSearchResults} />
+                        <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books/customer"} onResults={handleSearchResults} />
                 </div> 
                 <div className="books-list">
                   {books.length > 0 ? (
@@ -100,7 +100,7 @@ const UserHomePage=()=>{
                     <ul className='book-items'>
 
                         {books.map((book,index) => (
-                            <li key={book.book_id || index} className='book-item'><Link to={`/books/${book.book_id}`} className='link-to-detailspage'>
+                            <li key={book.book_id || index} className='book-item'><Link to={`/books/customer/${book.book_id}`} className='link-to-detailspage'>
                                 <span>{book.book_id}</span>   <span>{book.title}</span>   <span>{book.author}</span>   
                                 <span>{book.category}</span>   <span>{book.book_status}</span>   
                                 <span>{book.total_copies}</span>   <span>{book.available_copies}</span></Link>

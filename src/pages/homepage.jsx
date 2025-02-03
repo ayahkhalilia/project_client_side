@@ -4,7 +4,6 @@ import {IoHomeOutline,IoSettingsOutline} from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
-import { MdOutlineDoorFront } from "react-icons/md";
 import { LuSquarePlus } from "react-icons/lu";
 import { MdOutlineDelete } from "react-icons/md";
 import { GrUserManager } from "react-icons/gr";
@@ -19,8 +18,6 @@ const HomePage=()=>{
     const [error, setError] = useState(null); 
     const { token } = useAuth();
     const { username } = useAuth();
-
-   // const userName = authState?.username;
     
     useEffect(() => {
         const fetchBooks = async () => {
@@ -77,12 +74,12 @@ const HomePage=()=>{
   
     if (loading) return <p>Loading books...</p>;
     if (error) return <p>{error}</p>;
+    
     const handleSearchResults = (results) => {
         console.log('Search Results:', results);
         setBooks(results);
-    };
- //   const userName="jayjay";//this is for test it need it from server
-
+      };
+      
     return(
         <div className='nav-bar'>
             <div className='bar-rec'>
