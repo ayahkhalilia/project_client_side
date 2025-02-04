@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Use Context instead of localStorage
+import { useAuth } from '../context/AuthContext'; 
 import API from '../axiosConfig'; 
-import '../index.css'; // Assuming you have a separate CSS file for styling
+import '../index.css';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
