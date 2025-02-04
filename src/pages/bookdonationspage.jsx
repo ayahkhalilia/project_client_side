@@ -93,8 +93,8 @@ const BookDonationsPage = () => {
                                 <span className="header-item">Book Condition</span>
                             </div>
                             <ul className='book-items'>
-                                {donations.map((donation) => (
-                                    <li key={donation.donation_id} className='book-item'><Link to={`/books/pending-donation-requests/${donations.donation_id}`} className='link-to-detailspage'>
+                                {donations.map((donation,index) => (
+                                    <li key={donation.donation_id || index} className='book-item'><Link to={`/books/pending-donation-requests/${donation.donation_id}`} className='link-to-detailspage'>
                                         <span>{donation.donation_id}</span>
                                         <span>{donation.user_id.username}</span>
                                         <span>{donation.book_id.title}</span>

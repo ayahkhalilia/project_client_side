@@ -20,34 +20,48 @@ const DonationRequestDetailsPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log("Fetching details for Donation ID:", donation_id); 
+        
+        if (!donation_id) {
+            setError('Invalid donation ID');
+            setLoading(false);
+            return;
+        }
+        
+        if (!token) {
+            setError('No authentication token found');
+            setLoading(false);
+            return;
+        }
+    
         const fetchDonationRequestDetails = async () => {
-            if (!token) {
-                setError('No authentication token found');
-                setLoading(false);
-                return;
-            }
             try {
                 const response = await API.get(`/api/books/pending-donation-requests/${donation_id}`, {
-                    headers: { 'Authorization': `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${token}` },
                 });
+    
+                console.log("Fetched donation:", response.data);
                 setDonations(response.data);
             } catch (err) {
+                console.error('Error fetching donation:', err);
                 setError('Failed to fetch request details from the server');
             } finally {
                 setLoading(false);
             }
         };
-
+    
         fetchDonationRequestDetails();
     }, [donation_id, token]);
+    
+    
 
     const handleRequest = async (action) => {
         try {
             const response = await API.put(`/api/books/${action}-donation/${donation_id}`, {}, {
-                headers: { 'Authorization': `Bearer ${token}` },
+                headers: { 'Authorization':` Bearer ${token}` },
             });
             alert(response.data.message);
-            navigate('/book-donations');
+            navigate('/pending-donation-requests');
         } catch (err) {
             alert('Failed to process the request');
         }
@@ -70,25 +84,19 @@ const DonationRequestDetailsPage = () => {
             <div className='content'>
                 <header className='header'>
                     <h3 className='homepage'>Donation Request Details</h3>
-                    {}
                     <div className='user-info'>
                         <img src='#' className='profile-pic' alt="User Profile" />
                         <span>Hi, {username}</span>
-                        <Logout /> {}
+                        <Logout />
                     </div> 
                 </header>
 
                 {donations ? (
                     <div>
                         <h3>Donation ID: {donations.donation_id}</h3>
-                        {donations.book_photo ? (
-                            <img src={donations.book_photo} alt={donations.book_id?.title} style={{ width: '200px', height: '250px' }} />
-                        ) : (
-                            <p>No Image Available</p>
-                        )}
-                        <p><strong>Book Title:</strong> {donations.book_id?.title || 'N/A'}</p>
-                        <p><strong>Author:</strong> {donations.book_id?.author || 'N/A'}</p>
-                        <p><strong>User:</strong> {donations.user_id?.username || 'N/A'}</p>
+                        <p><strong>Book Title:</strong> {donations.book_title || 'N/A'}</p>
+                        <p><strong>Author:</strong> {donations.book_author || 'N/A'}</p>
+                        <p><strong>User:</strong> {donations.user_name || 'N/A'}</p>
                         <p><strong>Book condition:</strong> {donations.book_condition}</p>
                         <p><strong>Donation date:</strong> {donations.donation_date}</p>
                         <button onClick={() => handleRequest('accept')}>Accept Request</button>

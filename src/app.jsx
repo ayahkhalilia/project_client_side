@@ -16,7 +16,6 @@ import BookDetailsPageUser from './userpages/bookdetails.jsx';
 import DonateBooksPage from './userpages/donatebookpage.jsx';
 import BorrowedBooksPage from './userpages/borrowedbookspage.jsx';
 import BorrowedBookDetailsPageUser from './userpages/borrowedbookdetails.jsx';
-import DonationsFormPage from './userpages/donationsform.jsx';
 import UserLocationForm from './userpages/userlocationform.jsx';
 import UserNotificationsPage from './userpages/usernotifications.jsx';
 
@@ -40,7 +39,6 @@ const App = () => {
             <Route path='/userhomepage' element={<UserHomePage/>}/>
             <Route path='/books/customer/:book_id' element={<BookDetailsPageUser/>}/>
             <Route path='/donate-books-userpages' element={<DonateBooksPage/>}/>
-            <Route path='/donations-form-userpages' element={<DonationsFormPage/>}/>
             <Route path='/borrowed-books-userpages' element={<BorrowedBooksPage/>}/>
             <Route path='/books/my-borrowings/:borrowing_id' element={<BorrowedBookDetailsPageUser/>}/>
             <Route path='/user-location-form' element={<UserLocationForm/>}/>

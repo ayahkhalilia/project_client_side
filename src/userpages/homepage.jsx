@@ -46,7 +46,7 @@ const UserHomePage=()=>{
     
 
     const handleSearchResults = (results) => {
-        console.log('Search Results:', results); // Ensure results are coming
+        console.log('Search Results:', results); 
         setBooks(results);
     };
 
