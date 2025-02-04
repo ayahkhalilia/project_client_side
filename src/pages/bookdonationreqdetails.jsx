@@ -5,70 +5,91 @@ import { LuUsersRound } from 'react-icons/lu';
 import { RiBookShelfLine } from 'react-icons/ri';
 import { BiDonateHeart } from 'react-icons/bi';
 import { GrUserManager } from 'react-icons/gr';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import Logout from '../components/logout';
+import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; 
+import Logout from '../components/logout';
 import '../index.css';
 
 const DonationRequestDetailsPage = () => {
-    const [donations, setDonations] = useState(null);
+    const [donation, setDonation] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { token } = useAuth();
-    const { donation_id } = useParams();
     const { username } = useAuth();
-    const navigate = useNavigate();
+    const { donation_id } = useParams();
 
     useEffect(() => {
-        console.log("Fetching details for Donation ID:", donation_id); 
-        
-        if (!donation_id) {
-            setError('Invalid donation ID');
-            setLoading(false);
-            return;
-        }
-        
-        if (!token) {
-            setError('No authentication token found');
-            setLoading(false);
-            return;
-        }
-    
         const fetchDonationRequestDetails = async () => {
+            if (!token) {
+                setError('No authentication token found');
+                setLoading(false);
+                return;
+            }
             try {
                 const response = await API.get(`/api/books/pending-donation-requests/${donation_id}`, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { 'Authorization': `Bearer ${token}` },
                 });
-    
-                console.log("Fetched donation:", response.data);
-                setDonations(response.data);
+                setDonation(response.data);
             } catch (err) {
-                console.error('Error fetching donation:', err);
                 setError('Failed to fetch request details from the server');
             } finally {
                 setLoading(false);
             }
         };
-    
+
         fetchDonationRequestDetails();
     }, [donation_id, token]);
-    
-    
-
-    const handleRequest = async (action) => {
-        try {
-            const response = await API.put(`/api/books/${action}-donation/${donation_id}`, {}, {
-                headers: { 'Authorization':` Bearer ${token}` },
-            });
-            alert(response.data.message);
-            navigate('/pending-donation-requests');
-        } catch (err) {
-            alert('Failed to process the request');
-        }
-    };
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
+
+    const handleAccept = async () => {
+        if (!token) {
+            setError('No authentication token found');
+            return;
+        }
+
+        try {
+            const response = await API.put(`/api/books/accept-donation/${donation_id}`, {}, {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+
+            setDonation((prev) => ({
+                ...prev,
+                donation_status: 'accepted',
+            }));
+
+            alert(response.data.message || 'Donation request accepted successfully!');
+        } catch (err) {
+            console.error(`Failed to accept request with ID ${donation_id}:, err`);
+            setError('Failed to accept the request');
+            alert('Accepting donation request failed');
+        }
+    };
+
+    const handleReject = async () => {
+        if (!token) {
+            setError('No authentication token found');
+            return;
+        }
+
+        try {
+            const response = await API.put(`/api/books/reject-donation/${donation_id}`, {}, {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+
+            setDonation((prev) => ({
+                ...prev,
+                donation_status: 'rejected',
+            }));
+
+            alert(response.data.message || 'Donation request rejected successfully!');
+        } catch (err) {
+            console.error(`Failed to reject request with ID ${donation_id}:, err`);
+            setError('Failed to reject the request');
+            alert('Rejecting donation request failed');
+        }
+    };
 
     return (
         <div className='nav-bar'>
@@ -91,16 +112,15 @@ const DonationRequestDetailsPage = () => {
                     </div> 
                 </header>
 
-                {donations ? (
+                {donation ? (
                     <div>
-                        <h3>Donation ID: {donations.donation_id}</h3>
-                        <p><strong>Book Title:</strong> {donations.book_title || 'N/A'}</p>
-                        <p><strong>Author:</strong> {donations.book_author || 'N/A'}</p>
-                        <p><strong>User:</strong> {donations.user_name || 'N/A'}</p>
-                        <p><strong>Book condition:</strong> {donations.book_condition}</p>
-                        <p><strong>Donation date:</strong> {donations.donation_date}</p>
-                        <button onClick={() => handleRequest('accept')}>Accept Request</button>
-                        <button onClick={() => handleRequest('reject')}>Reject Request</button>
+                        <h3>Donation ID: {donation.donation_id}</h3>
+                        <p><strong>Book Title:</strong> {donation.book_id?.title || 'N/A'}</p>
+                        <p><strong>Author:</strong> {donation.book_id?.author || 'N/A'}</p>
+                        <p><strong>User:</strong> {donation.user_id?.username || 'N/A'}</p>
+                        <p><strong>Status:</strong> {donation.donation_status}</p>
+                        <button onClick={handleAccept}>Accept</button>
+                        <button onClick={handleReject}>Reject</button>
                     </div>
                 ) : (
                     <p>No request details found.</p>
