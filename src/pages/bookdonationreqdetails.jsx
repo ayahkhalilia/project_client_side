@@ -6,6 +6,7 @@ import { RiBookShelfLine } from 'react-icons/ri';
 import { BiDonateHeart } from 'react-icons/bi';
 import { GrUserManager } from 'react-icons/gr';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import Logout from '../components/logout';
 import { useAuth } from '../context/AuthContext'; 
 import '../index.css';
 
@@ -69,10 +70,12 @@ const DonationRequestDetailsPage = () => {
             <div className='content'>
                 <header className='header'>
                     <h3 className='homepage'>Donation Request Details</h3>
+                    {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt='Profile' />
+                        <img src='#' className='profile-pic' alt="User Profile" />
                         <span>Hi, {username}</span>
-                    </div>
+                        <Logout /> {}
+                    </div> 
                 </header>
 
                 {donations ? (

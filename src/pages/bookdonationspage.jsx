@@ -7,6 +7,7 @@ import { MdOutlineDoorFront, MdOutlineDelete } from 'react-icons/md';
 import { GrUserManager } from 'react-icons/gr';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
+import Logout from '../components/logout.jsx';
 import { useAuth } from '../context/AuthContext';
 import API from '../axiosConfig';
 import '../index.css';
@@ -67,10 +68,12 @@ const BookDonationsPage = () => {
             <div className='content'>
                 <header className='header'>
                     <h3 className='homepage'>Donation Requests</h3>
+                    {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt="profile" />
+                        <img src='#' className='profile-pic' alt="User Profile" />
                         <span>Hi, {username}</span>
-                    </div>
+                        <Logout /> {}
+                    </div> 
                 </header>
                 <div className='search-bar'>
                     <SearchBar apiEndpoint={"api/books/pending-donation-requests"} onResults={handleSearchResults} />

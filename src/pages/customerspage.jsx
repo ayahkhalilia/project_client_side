@@ -12,6 +12,7 @@ import { GrUserManager } from "react-icons/gr";
 import { useAuth } from '../context/AuthContext'; 
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
+import Logout from '../components/logout.jsx';
 import '../index.css';
 
 const CustomersPage = () => {
@@ -90,12 +91,11 @@ const CustomersPage = () => {
                 <header className='header'>
                     <h3 className='homepage'>Customers</h3>        
                     
+                    {}
                     <div className='user-info'>
-                        <img
-                            src='#'
-                            className='profile-pic'
-                        />
-                        <span>Hi,{username}</span>
+                        <img src='#' className='profile-pic' alt="User Profile" />
+                        <span>Hi, {username}</span>
+                        <Logout /> {}
                     </div> 
                 </header>
                 <div className='search-bar'>

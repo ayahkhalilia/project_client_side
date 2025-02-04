@@ -7,6 +7,7 @@ import { GrUserManager } from "react-icons/gr";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import { useAuth } from '../context/AuthContext';
+import Logout from '../components/logout.jsx';
 import API from '../axiosConfig';
 import '../index.css';
 
@@ -59,9 +60,11 @@ const BookRequestsPage = () => {
             <div className='content'>
                 <header className='header'>
                     <h3 className='homepage'>Book Requests</h3>        
+                    {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt="Profile" />
+                        <img src='#' className='profile-pic' alt="User Profile" />
                         <span>Hi, {username}</span>
+                        <Logout /> {}
                     </div> 
                 </header>
                 <div className='search-bar'>

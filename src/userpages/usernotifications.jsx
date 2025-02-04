@@ -6,6 +6,7 @@ import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
+import Logout from '../components/logout.jsx';
 import { useAuth } from '../context/AuthContext'; 
 import '../index.css';
 
@@ -73,12 +74,11 @@ const UserNotificationsPage=()=>{
                 <header className='header'>
                     <h3 className='homepage'>Home</h3>        
                     
+                    {}
                     <div className='user-info'>
-                        <img
-                            src='#'
-                            className='profile-pic'
-                        />
-                        <span>Hi,{username}</span>
+                        <img src='#' className='profile-pic' alt="User Profile" />
+                        <span>Hi, {username}</span>
+                        <Logout /> {}
                     </div> 
                 </header>
                 <div className='search-bar'>

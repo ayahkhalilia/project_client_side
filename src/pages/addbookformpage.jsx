@@ -8,6 +8,7 @@ import { MdOutlineDoorFront } from "react-icons/md";
 import { GrUserManager } from "react-icons/gr";
 import AddButton from '../components/addbutton';
 import { useNavigate, Link } from 'react-router-dom';
+import Logout from '../components/logout';
 import { useAuth } from '../context/AuthContext'; 
 import '../index.css';
 
@@ -93,10 +94,12 @@ const AddBookFormPage = () => {
             <div className='content'>
                 <header className='header'>
                     <h3 className='homepage'>Add Book Form</h3>
+                    {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt="Profile" />
+                        <img src='#' className='profile-pic' alt="User Profile" />
                         <span>Hi, {username}</span>
-                    </div>
+                        <Logout /> {}
+                    </div> 
                 </header>
 
                 <div className="add-book-form">

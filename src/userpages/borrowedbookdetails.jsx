@@ -4,6 +4,7 @@ import API from '../axiosConfig';
 import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
 import { RiBookShelfLine } from 'react-icons/ri';
 import { BiDonateHeart } from 'react-icons/bi';
+import Logout from '../components/logout';
 import { useAuth } from '../context/AuthContext';
 import '../index.css';
 
@@ -66,10 +67,12 @@ const BorrowedBookDetailsPageUser = () => {
             <div className="content">
                 <header className="header">
                     <h3 className="homepage">Borrowed Book Details</h3>
-                    <div className="user-info">
-                        <img src="#" className="profile-pic" alt="Profile" />
+                    {}
+                    <div className='user-info'>
+                        <img src='#' className='profile-pic' alt="User Profile" />
                         <span>Hi, {username}</span>
-                    </div>
+                        <Logout /> {}
+                    </div> 
                 </header>
                 {bookBorrowing ? (
                     <div>

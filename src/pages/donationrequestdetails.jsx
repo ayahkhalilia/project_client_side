@@ -7,6 +7,7 @@ import { BiDonateHeart } from 'react-icons/bi';
 import { GrUserManager } from 'react-icons/gr';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; 
+import Logout from '../components/logout';
 import '../index.css';
 
 const DonationRequestDetailsPage = () => {
@@ -108,10 +109,12 @@ const DonationRequestDetailsPage = () => {
             <div className='content'>
                 <header className='header'>
                     <h3 className='homepage'>Donation Request Details</h3>
+                    {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt='Profile' />
+                        <img src='#' className='profile-pic' alt="User Profile" />
                         <span>Hi, {username}</span>
-                    </div>
+                        <Logout /> {}
+                    </div> 
                 </header>
 
                 {donations ? (

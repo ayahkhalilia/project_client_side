@@ -14,28 +14,73 @@
   font-family: Arial, sans-serif;
 }
 
-/* Sidebar */
+/* Sidebar - Fixed */
 .bar-rec {
   width: 250px;
-  background-color: #f0f0f0;
+  height: 100vh; 
+  background-color: #eaeaea;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  border-right: 1px solid #ddd; 
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
+  position: fixed; 
+  top: 0;
+  left: 0;
+  overflow: hidden; 
 }
 
-.bar-rec .settings-icon {
-  margin-bottom: 20px;
-  cursor: pointer;
-}
-
+/* Sidebar links */
 .bar-rec a {
   text-decoration: none;
-  color: #333;
-  margin: 10px 0;
+  color: #000000;
   font-size: 18px;
-  display: block;
+  font-weight: 500;
+  padding: 12px 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
+
+.bar-rec a:hover {
+  background-color: #ffffff;
+  color: #555;
+}
+
+.bar-rec a.active {
+  background-color: #007bff;
+  color: #96c27d;
+}
+
+.bar-rec a svg {
+  margin-right: 10px;
+  font-size: 22px;
+}
+
+/* Settings icon at bottom */
+.settings-icon {
+  margin-top: auto; 
+  padding: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.settings-icon:hover {
+  color: #007bff;
+}
+
+/* Content area (Make it scrollable) */
+.content {
+  margin-left: 250px; 
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
 
 /* Main Content */
 .content {
@@ -420,3 +465,30 @@ ul.book-items li.book-item {
 
 
 /*/////////////////////////////////////////////*/
+
+.user-info {
+  position: relative;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+
+/*/////////////////////////////////////////////////////////////////*/
