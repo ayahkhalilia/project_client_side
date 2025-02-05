@@ -63,6 +63,8 @@ const CustomersPage = () => {
     return(
         <div className='nav-bar'>
             <div className='bar-rec'>
+            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+
               <h3><Link to="/home">
                     <IoHomeOutline /> Home
                   </Link> 
@@ -83,7 +85,6 @@ const CustomersPage = () => {
                     <GrUserManager /> Manage return books
                   </Link>
               </h3>
-            <div className='setting'><IoSettingsOutline /></div>
             </div>
 
             
@@ -93,7 +94,7 @@ const CustomersPage = () => {
                     
                     {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt="User Profile" />
+                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
                         <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 

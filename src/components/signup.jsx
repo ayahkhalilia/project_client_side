@@ -49,6 +49,8 @@ const SignupPage = () => {
         <div className="signup-page">
         <div className="signup-page">
             <div className="signup-form-container">
+              <img src='https://rebook-backend-ldmy.onrender.com/uploads/white_logo.jpg' alt='Logo' style={{width:'250px',height:'auto'}}/>
+
                 <h1 className="signup-heading">Sign Up</h1>
                 <form onSubmit={handleSubmit} className="signup-form">
                     <div className="input-group">
@@ -114,7 +116,8 @@ const SignupPage = () => {
                     </div>
                 </form>
             </div>
-        </div></div>
+        </div>
+        </div>
     );
 };
 

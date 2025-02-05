@@ -61,39 +61,56 @@ const BookDetailsPageUser = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
+            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
                 <h3><Link to='/userhomepage'><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to='/donate-books-userpages'><BiDonateHeart /> Donate Books</Link></h3>
                 <h3><Link to='/borrowed-books-userpages'><RiBookShelfLine /> Borrowed Books</Link></h3>
-                <div className='setting'><IoSettingsOutline /></div>
             </div>
             <div className='content'>
-                <header className='header'>
-                    <h3 className='homepage'>Book Details</h3>
+            <header className='header'>
+                    <h3 className='homepage'>Home</h3>        
+                    
                     {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt="User Profile" />
+                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
+
                         <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 
                 </header>
-                {book ? (
-                    <div>
-                        <h3>{book.title}</h3>
-                        {book.image_url ? (
-                            <img src={book.image_url} alt={book.title} style={{ width: '200px', height: '250px' }} />
-                        ) : (
-                            <p>No Image Available</p>
-                        )}
-                        <p><strong>Author:</strong> {book.author}</p>
-                        <p><strong>Category:</strong> {book.category}</p>
-                        <p><strong>Status:</strong> {book.book_status}</p>
-                        <p><strong>Total Copies:</strong> {book.total_copies}</p>
-                        <p><strong>Available Copies:</strong> {book.available_copies}</p>
-                        <button onClick={handleBorrowRequest} className='borrow-button'>Request to Borrow</button>
-                    </div>
-                ) : (
-                    <p>No book details found.</p>
-                )}
+                <div className="cont">
+  {book ? (
+    <div className="book-details-container">
+      <div className="book-image">
+        {book.book_photo ? (
+          <img 
+            src={`https://rebook-backend-ldmy.onrender.com${book.book_photo}`} 
+            alt={book.title} 
+            style={{ width: '200px', height: '250px' }} 
+            onError={(e) => e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg"} 
+          />
+        ) : (
+          <p>No Image Available</p>
+        )}
+      </div>
+
+      <div className="book-details">
+        <h3>{book.title}</h3>
+        <p><strong>Author:</strong> {book.author}</p>
+        <p><strong>Category:</strong> {book.category}</p>
+        <p><strong>Status:</strong> {book.book_status}</p>
+        <p><strong>Total Copies:</strong> {book.total_copies}</p>
+        <p><strong>Available Copies:</strong> {book.available_copies}</p>
+        <button onClick={handleBorrowRequest} className="borrow-button" style={{ background: '#9fed51', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+          Request to Borrow
+        </button>
+      </div>
+    </div>
+  ) : (
+    <p>No book details found.</p>
+  )}
+</div>
+
             </div>
         </div>
     );
