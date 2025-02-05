@@ -226,7 +226,7 @@ const BookDetailsPage = () => {
                         <h3>{book.title}</h3>
                         {book.book_photo ? (
                             <img
-                                src={`http://localhost:5000${book.book_photo}`} 
+                                src={`api/books/${book.book_photo}`} 
                                 alt={book.title}
                                 style={{ width: '200px', height: '250px' }}
                             />

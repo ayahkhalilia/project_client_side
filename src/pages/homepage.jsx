@@ -119,9 +119,11 @@ const HomePage=()=>{
                         <Logout /> {}
                     </div> 
                 </header>
-                <div className='search-bar'>
+
+                 <div className='search-bar'>
                         <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books"} onResults={handleSearchResults} />
-                </div> 
+                 </div> 
+
                 <div className="books-list">
                     <Link to={"/add-book-list"}><LuSquarePlus /></Link>
                   {books.length > 0 ? (

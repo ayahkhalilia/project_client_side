@@ -8,7 +8,7 @@ import { BiDonateHeart } from "react-icons/bi";
 import { GrUserManager } from "react-icons/gr";
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; 
-import { format } from 'date-fns'; // Import date-fns
+import { format } from 'date-fns'; 
 
 import '../index.css';
 
@@ -18,11 +18,11 @@ const DonationDetailsPage = () => {
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false); 
     const [formData, setFormData] = useState({});
-    const [imageFile, setImageFile] = useState(null); // Added state for image file
+    const [imageFile, setImageFile] = useState(null); 
     const { token, user } = useAuth(); 
     const { donation_id } = useParams();
     const { username } = useAuth();
-    const navigate = useNavigate(); // Use navigate for redirection
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchDonationDetails = async () => {
@@ -66,7 +66,7 @@ const DonationDetailsPage = () => {
             }));
 
             alert(response.data.message || 'Donation request accepted successfully!');
-            navigate('/book-donations'); // Redirect to book donations page
+            navigate('/book-donations'); 
         } catch (err) {
             console.error(`Failed to accept request with ID ${donation_id}:`, err);
             setError('Failed to accept the request');
@@ -91,7 +91,7 @@ const DonationDetailsPage = () => {
             }));
 
             alert(response.data.message || 'Donation request rejected successfully!');
-            navigate('/book-donations'); // Redirect to book donations page
+            navigate('/book-donations'); 
         } catch (err) {
             console.error(`Failed to reject request with ID ${donation_id}:`, err);
             setError('Failed to reject the request');
@@ -121,7 +121,6 @@ const DonationDetailsPage = () => {
         try {
             let updatedBookData = { ...formData };
 
-            // Handle Image Upload if a new image is selected
             if (imageFile) {
                 const formDataImage = new FormData();
                 formDataImage.append('image', imageFile);
@@ -195,67 +194,10 @@ const DonationDetailsPage = () => {
                     </div>
                 </header>
 
-                <div>
-                    <MdOutlineModeEdit onClick={handleEditToggle} style={{ cursor: 'pointer' }} />
-                </div>
 
-                {isEditing ? (
-                    <div>
-                        <h3>Edit Donation Request</h3>
-                        <form>
-                            <label>
-                                Book Title:
-                                <input
-                                    type="text"
-                                    name="book_title"
-                                    value={formData.book_title}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Book Author:
-                                <input
-                                    type="text"
-                                    name="book_author"
-                                    value={formData.book_author}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Book Condition:
-                                <input
-                                    type="text"
-                                    name="book_condition"
-                                    value={formData.book_condition}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Donation Date:
-                                <input
-                                    type="date"
-                                    name="donation_date"
-                                    value={formData.donation_date}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Book Photo:
-                                <input
-                                    type="file"
-                                    name="book_photo"
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <button type="button" onClick={handleSaveChanges}>Save Changes</button>
-                        </form>
-                    </div>
-                ) : (
+
+                {donation ? (
+       
                     <div>
                         <h3>{donation.book_title}</h3>
                         {donation.book_photo ? (
@@ -279,7 +221,7 @@ const DonationDetailsPage = () => {
                         <button onClick={handleAccept}>Accept</button>
                         <button onClick={handleReject}>Reject</button>
                     </div>
-                )}
+                ):(<p>No donation request details found.</p>)}
             </div>
         </div>
     );
