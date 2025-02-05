@@ -5,7 +5,6 @@ import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
-import { MdOutlineDoorFront } from "react-icons/md";
 import { GrUserManager } from "react-icons/gr";
 import { useParams, Link } from 'react-router-dom';
 import Logout from '../components/logout';
@@ -82,7 +81,7 @@ const BookDetailsPage = () => {
                     }
                 });
 
-                updatedBookData.image_url = imageResponse.data.image_url; // Assuming API returns image URL
+                updatedBookData.book_photo = imageResponse.data.image_url; // Assuming API returns image URL
             }
 
             const response = await API.put(`/api/books/${book_id}`, updatedBookData, {
@@ -225,8 +224,12 @@ const BookDetailsPage = () => {
                 ) : (
                     <div>
                         <h3>{book.title}</h3>
-                        {book.image_url ? (
-                            <img src={book.image_url} alt={book.title} style={{ width: '200px', height: '250px' }} />
+                        {book.book_photo ? (
+                            <img
+                                src={`http://localhost:5000${book.book_photo}`} 
+                                alt={book.title}
+                                style={{ width: '200px', height: '250px' }}
+                            />
                         ) : (
                             <p>No Image Available</p>
                         )}
