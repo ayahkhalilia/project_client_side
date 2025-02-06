@@ -716,8 +716,7 @@ ul.book-items li.book-item {
 @media (max-width: 768px) {
   .cont {
       flex-direction: column; /* Stack elements */
-      align-items: center;
-      text-align: center;
+
   }
 
   .book-image {
