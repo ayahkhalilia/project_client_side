@@ -114,10 +114,10 @@ const HomePage=()=>{
                     
                     {}
                     <div className='user-info'>
-    <img src={`https://rebook-backend-ldmy.onrender.com/uploads/${username}`} className='profile-pic' alt="User Profile" />
-    <span>Hi, {username}</span>
-    <Logout />
-</div>
+                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
+                        <span>Hi, {username}</span>
+                        <Logout /> {}
+                    </div> 
  
                 </header>
 
