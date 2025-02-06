@@ -7,6 +7,7 @@ import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
 import { GrUserManager } from "react-icons/gr";
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import Logout from '../components/logout.jsx';
 import { useAuth } from '../context/AuthContext'; 
 import { format } from 'date-fns'; 
 
@@ -87,12 +88,15 @@ const DonationDetailsPage = () => {
             </div>
 
             <div className='content'>
-                <header className='header'>
-                    <h3 className='homepage'>Donation Request Details</h3>
+            <header className='header'>
+                    <h3 className='homepage'>Donation Request Details</h3>        
+                    
+                    {}
                     <div className='user-info'>
-                        <img src={`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`} className='profile-pic' alt='User Profile'/>
+                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
                         <span>Hi, {username}</span>
-                    </div>
+                        <Logout /> {}
+                    </div> 
                 </header>
 
                 <div className='cont'>
