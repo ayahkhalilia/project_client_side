@@ -133,12 +133,14 @@ const BookDetailsPage = () => {
 
             <div className='content'>
                 <header className='header'>
+
                     <h3 className='homepage'>Book Details</h3>
                     <div className='user-info'>
                     <img src={`https://rebook-backend-ldmy.onrender.com/uploads/${username}`} className='profile-pic' alt="User Profile" />
                     <span>Hi, {username}</span>
                         <Logout />
                     </div> 
+                    
                 </header>
 
                 {isEditing ? (
