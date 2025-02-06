@@ -98,8 +98,8 @@ const BookDonationsPage = () => {
                                     <li key={donation.donation_id || index} className='book-item'><Link to={`/books/pending-donation-requests/${donation.donation_id}`} className='link-to-detailspage'>
                                         <span>{donation.donation_id}</span>
                                         <span>{donation.user_id.username}</span>
-                                        <span>{donation.book_id.title}</span>
-                                        <span>{donation.book_id.author}</span>
+                                        <span>{donation.book_id?.title}</span>
+                                        <span>{donation.book_id?.author}</span>
                                         <span>{donation.book_condition}</span></Link>
                                     </li>
                                 ))}

@@ -118,7 +118,7 @@ const DonateBooksPage = () => {
         <div className='contt'>
 
             <form onSubmit={handleSubmit}>
-                <div>
+            <div>
                     <input
                         type="text"
                         name="book_title"
@@ -177,8 +177,7 @@ const DonateBooksPage = () => {
                 </div>
                 {error && <p className="error-message">{error}</p>}
                 <button type="submit">Send Donation Request</button>
-            </form>
-            </div>
+                </form></div>
             </div>
         </div>
       </div>
