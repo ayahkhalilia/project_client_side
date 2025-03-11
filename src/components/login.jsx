@@ -37,6 +37,9 @@ const LoginPage = () => {
     return (
         <div className="login-page">
             <div className="login-form-container">
+                
+            <img src='https://rebook-backend-ldmy.onrender.com/uploads/white_logo.jpg' alt='Logo' style={{width:'250px',height:'auto'}}/>
+
                 <h1 className="login-heading">Login</h1>
                 <form onSubmit={handleSubmit} className="login-form">
                     <div className="input-group">

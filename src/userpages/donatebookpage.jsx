@@ -85,6 +85,8 @@ const DonateBooksPage = () => {
     return (
         <div className='nav-bar'>
         <div className='bar-rec'>
+        <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+
           <h3><Link to="/userhomepage">
                 <IoHomeOutline /> Home
               </Link> 
@@ -98,7 +100,6 @@ const DonateBooksPage = () => {
               </Link>
           </h3>
           
-        <div className='setting'><IoSettingsOutline /></div>
         </div>
 
         
@@ -108,14 +109,16 @@ const DonateBooksPage = () => {
                 
                 {}
                 <div className='user-info'>
-                    <img src='#' className='profile-pic' alt="User Profile" />
-                    <span>Hi, {username}</span>
+                <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
+                <span>Hi, {username}</span>
                     <Logout /> {}
                 </div> 
             </header>
         <div className="donate-book-page">
+        <div className='contt'>
+
             <form onSubmit={handleSubmit}>
-                <div>
+            <div>
                     <input
                         type="text"
                         name="book_title"
@@ -174,7 +177,7 @@ const DonateBooksPage = () => {
                 </div>
                 {error && <p className="error-message">{error}</p>}
                 <button type="submit">Send Donation Request</button>
-            </form>
+                </form></div>
             </div>
         </div>
       </div>

@@ -84,6 +84,7 @@ const HomePage=()=>{
     return(
         <div className='nav-bar'>
             <div className='bar-rec'>
+                <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
               <h3><Link to="/home">
                     <IoHomeOutline /> Home
                   </Link> 
@@ -104,7 +105,6 @@ const HomePage=()=>{
                     <GrUserManager /> Manage return books
                   </Link>
               </h3>
-            <div className='setting'><IoSettingsOutline /></div>
             </div>
 
             
@@ -114,14 +114,17 @@ const HomePage=()=>{
                     
                     {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt="User Profile" />
+                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
                         <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 
+ 
                 </header>
-                <div className='search-bar'>
+
+                 <div className='search-bar'>
                         <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books"} onResults={handleSearchResults} />
-                </div> 
+                 </div> 
+
                 <div className="books-list">
                     <Link to={"/add-book-list"}><LuSquarePlus /></Link>
                   {books.length > 0 ? (

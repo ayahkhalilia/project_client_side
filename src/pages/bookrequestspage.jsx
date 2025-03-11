@@ -49,12 +49,13 @@ const BookRequestsPage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
+            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+
                 <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/customers"><LuUsersRound /> Customers</Link></h3>
                 <h3><Link to="/book-requests"><RiBookShelfLine /> Book Requests</Link></h3>
                 <h3><Link to="/book-donations"><BiDonateHeart /> Book Donations</Link></h3>
                 <h3><Link to="/managereturnbooks"><GrUserManager /> Manage Return Books</Link></h3>
-                <div className='setting'><IoSettingsOutline /></div>
             </div>
 
             <div className='content'>
@@ -62,7 +63,7 @@ const BookRequestsPage = () => {
                     <h3 className='homepage'>Book Requests</h3>        
                     {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt="User Profile" />
+                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
                         <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 

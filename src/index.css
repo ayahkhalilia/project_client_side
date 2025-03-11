@@ -18,7 +18,7 @@
 .bar-rec {
   width: 250px;
   height: 100vh; 
-  background-color: #eaeaea;
+  background-color: #e3dad1;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -46,7 +46,7 @@
 }
 
 .bar-rec a:hover {
-  background-color: #ffffff;
+  background-color: #fff7f3;
   color: #555;
 }
 
@@ -93,7 +93,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .homepage {
@@ -107,8 +106,8 @@
 }
 
 .profile-pic {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 20px;
   border-radius: 50%;
   margin-right: 10px;
 }
@@ -137,7 +136,7 @@
 }
 
 .small-rec-login-signup{
-  background: #cdcbcb;
+  background: #decdbc;
   width: 300px;
   height: 250px;
 }
@@ -164,7 +163,7 @@
 .books-list{
   font-family: Arial, sans-serif;
   padding: 10px;
-  background-color: #f9f9f9;
+  background-color: #fffbf7;
   border-radius: 5px;
 }
 
@@ -172,7 +171,7 @@
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  background-color: #f5f5f5;
+  background-color: #fff7f3;
   font-weight: bold;
   border-bottom: 2px solid #ddd;
 }
@@ -231,8 +230,8 @@ ul.book-items li.book-item {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f4f7fa;
+  height: 100%;
+  background-color: #ffffff;
   font-family: 'Arial', sans-serif;
 }
 
@@ -289,7 +288,7 @@ ul.book-items li.book-item {
 }
 
 .login-button {
-  background-color: #007bff;
+  background-color: #decdbc;
   color: white;
   padding: 12px;
   font-size: 1.1rem;
@@ -300,7 +299,7 @@ ul.book-items li.book-item {
 }
 
 .login-button:hover {
-  background-color: #0056b3;
+  background-color: #decdbc;
 }
 
 .signup-prompt {
@@ -308,7 +307,7 @@ ul.book-items li.book-item {
 }
 
 .signup-link {
-  color: #007bff;
+  color: #8e775d;
   text-decoration: none;
   font-weight: bold;
 }
@@ -316,6 +315,106 @@ ul.book-items li.book-item {
 .signup-link:hover {
   text-decoration: underline;
 }
+
+
+/*/////////////////////signup page/////////////////////*/
+.sign_body {
+  background-color: #f4f7fa;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Arial', sans-serif;
+}
+
+.signup-form-container {
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.signup-heading {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  text-align: left;
+}
+
+.input-label {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: #007bff;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: -10px;
+}
+
+.signup-button {
+  background-color: #decdbc;
+  color: white;
+  padding: 12px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: #c9b29a;
+}
+
+.login-prompt {
+  margin-top: 15px;
+}
+
+.login-link {
+  color: #8e775d;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
 
 
 
@@ -352,8 +451,8 @@ ul.book-items li.book-item {
 }
 
 .profile-pic {
-  width: 80px;
-  height: 80px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   background-color: #ffffff;
   margin-bottom: 10px;
@@ -393,15 +492,13 @@ ul.book-items li.book-item {
 .content {
   flex-grow: 1;
   padding: 20px;
+  padding-top: 30px;
 }
 
 .header h1 {
   font-size: 1.8rem;
 }
 
-.search-container {
-  margin-bottom: 20px;
-}
 
 .book-list {
   background-color: white;
@@ -469,17 +566,27 @@ ul.book-items li.book-item {
 .user-info {
   position: relative;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.username {
+  color: #333;
+  font-size: 1rem;
+  text-decoration: none;
 }
 
 .dropdown-menu {
   position: absolute;
-  top: 40px;
+  top: 30px;
   right: 0;
   background: white;
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
 }
 
 .logout-button {
@@ -488,7 +595,244 @@ ul.book-items li.book-item {
   color: red;
   cursor: pointer;
   font-size: 14px;
+  padding: 5px 10px;
 }
 
 
 /*/////////////////////////////////////////////////////////////////*/
+/*//////////////searchbar///////////////*/
+.search-bar {
+
+  margin: 10px 0;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.search-bar input {
+  width: 100%;
+  max-width: 250px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+  border-color: #e3dad1;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.2);
+}
+
+.search-bar button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #e3dad1;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.search-bar button:hover {
+  background-color: #c0b1a2;
+}
+
+
+
+
+/*/////////////////////////////////bookdetails//////////////*/
+
+/* Main container */
+/* Container for book details */
+.cont {
+  align-items: flex-start; /* Aligns items at the top */
+  gap: 30px; /* Space between the image and details */
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Book image styling */
+.book-image {
+  width: 250px; /* Fixed width */
+  height: 350px; /* Fixed height */
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Book details section */
+.book-details {
+  flex: 1; /* Take the remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Book title */
+.book-details h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Book details text */
+.book-details p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.book-details p strong {
+  font-weight: 600;
+  color: #222;
+}
+
+/* Edit button */
+.edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: black;
+  font-size: 16px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.edit-btn:hover {
+  color: #5746d0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cont {
+      flex-direction: column; /* Stack elements */
+
+  }
+
+  .book-image {
+      width: 200px;
+      height: 280px;
+  }
+
+  .book-details {
+      align-items: center;
+  }
+}
+
+
+/*////////////////////////////////////*/
+.add-book-list{
+color: #000000;
+}
+
+
+.donation-details {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.book-image {
+  width: 200px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.book-details {
+  flex: 1;
+}
+
+
+/*//////////////////////donation form//////////////////////*/
+
+.contt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fffbf7;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+}
+
+.contt form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contt input, 
+.contt select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.contt button {
+  background: #9fed51;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.contt button:hover {
+  background: #73ab3b;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+}
+
+
+/*////////////////////////////////////////////////////*/
+.cont {
+  display: flex;
+
+  gap: 20px;
+}
+
+.book-details-container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.book-image img {
+  width: 200px;
+  height: 250px;
+}
+
+.book-details {
+  flex-grow: 1;
+}
+
+.return-button {
+  background-color: #9fed51;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+

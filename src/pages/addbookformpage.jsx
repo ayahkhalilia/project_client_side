@@ -62,6 +62,8 @@ const AddBookFormPage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
+            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+
                 <h3>
                     <Link to="/home">
                         <IoHomeOutline /> Home
@@ -86,9 +88,6 @@ const AddBookFormPage = () => {
                         <GrUserManager /> Manage return books
                     </Link>
                 </h3>
-                <div className='setting'>
-                    <IoSettingsOutline />
-                </div>
             </div>
 
             <div className='content'>
@@ -96,14 +95,15 @@ const AddBookFormPage = () => {
                     <h3 className='homepage'>Add Book Form</h3>
                     {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt="User Profile" />
+                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
                         <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 
                 </header>
 
                 <div className="add-book-form">
-                    <h3>Add Book</h3>
+                  <div className='contt'>
+
                     <form onSubmit={handleSubmit}>
                         <div>
                             <label>Title:</label>
@@ -159,6 +159,7 @@ const AddBookFormPage = () => {
                         </div>
                         <AddButton label="Add Book" onClick={handleSubmit} />
                     </form>
+                  </div>
                 </div>
             </div>
         </div>

@@ -103,6 +103,8 @@ const BookDetailsPage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
+            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+
                 <h3>
                     <Link to="/home">
                         <IoHomeOutline /> Home
@@ -127,24 +129,23 @@ const BookDetailsPage = () => {
                     <GrUserManager /> Manage return books
                   </Link>
                 </h3>
-                <div className='setting'><IoSettingsOutline /></div>
             </div>
 
             <div className='content'>
                 <header className='header'>
+
                     <h3 className='homepage'>Book Details</h3>
-                    {}
                     <div className='user-info'>
-                        <img src='#' className='profile-pic' alt="User Profile" />
-                        <span>Hi, {username}</span>
-                        <Logout /> {}
+                    <img src={`https://rebook-backend-ldmy.onrender.com/uploads/${username}`} className='profile-pic' alt="User Profile" />
+                    <span>Hi, {username}</span>
+                        <Logout />
                     </div> 
+                    
                 </header>
-                <div>
-                    <MdOutlineModeEdit onClick={handleEditToggle} style={{ cursor: 'pointer' }} />
-                </div>
 
                 {isEditing ? (
+                  <div className='contt'>
+
                     <div>
                         <h3>Edit Book Details</h3>
                         <form>
@@ -220,26 +221,41 @@ const BookDetailsPage = () => {
                             <br />
                             <button type="button" onClick={handleSaveChanges}>Save Changes</button>
                         </form>
+                       </div>
                     </div>
+
                 ) : (
-                    <div>
-                        <h3>{book.title}</h3>
-                        {book.book_photo ? (
-                            <img
-                                src={`http://localhost:5000${book.book_photo}`} 
-                                alt={book.title}
-                                style={{ width: '200px', height: '250px' }}
-                            />
-                        ) : (
-                            <p>No Image Available</p>
-                        )}
-                        <p><strong>Author:</strong> {book.author}</p>
-                        <p><strong>Category:</strong> {book.category}</p>
-                        <p><strong>Status:</strong> {book.book_status}</p>
-                        <p><strong>Total Copies:</strong> {book.total_copies}</p>
-                        <p><strong>Available Copies:</strong> {book.available_copies}</p>
+                <div className='cont'>
+                     {}
+                     {book.book_photo ? (
+                     <img 
+                     className="book-image" 
+                         src={`https://rebook-backend-ldmy.onrender.com${book.book_photo}`} 
+                         alt={book.title} 
+                         onError={(e) => e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg"}
+                     />
+                     ) : (<p>No Image Available</p>
+                     )}
+
+                     {}
+                   <div className="book-details">
+                          <h3>{book.title}</h3>
+                          <p><strong>Author:</strong> {book.author}</p>
+                          <p><strong>Category:</strong> {book.category}</p>
+                          <p><strong>Status:</strong> {book.book_status}</p>
+                          <p><strong>Total Copies:</strong> {book.total_copies}</p>
+                          <p><strong>Available Copies:</strong> {book.available_copies}</p>
+
+                       {}
+                     <div className="edit-btn" onClick={handleEditToggle}>
+                         <MdOutlineModeEdit /> Edit
+                     </div>
                     </div>
+                </div>
+
+                   
                 )}
+             
             </div>
         </div>
     );

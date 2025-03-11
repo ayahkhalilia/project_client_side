@@ -11,12 +11,11 @@ import { useAuth } from '../context/AuthContext';
 import '../index.css';
 
 const BorrowRequestDetailsPage = () => {
-    const [bookborrowings, setBookborrowings] = useState(null);
+    const [bookBorrowing, setBookBorrowing] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { token } = useAuth();
+    const { token, username } = useAuth();
     const { borrowing_id } = useParams();
-    const { username } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,7 +29,7 @@ const BorrowRequestDetailsPage = () => {
                 const response = await API.get(`/api/books/borrow-requests/${borrowing_id}`, {
                     headers: { 'Authorization': `Bearer ${token}` },
                 });
-                setBookborrowings(response.data);
+                setBookBorrowing(response.data);
             } catch (err) {
                 setError('Failed to fetch request details from the server');
             } finally {
@@ -70,27 +69,51 @@ const BorrowRequestDetailsPage = () => {
             <div className='content'>
                 <header className='header'>
                     <h3 className='homepage'>Borrow Request Details</h3>
-                    {}
                     <div className='user-info'>
                         <img src='#' className='profile-pic' alt="User Profile" />
                         <span>Hi, {username}</span>
-                        <Logout /> {}
+                        <Logout />
                     </div> 
                 </header>
+                <div className="cont">
+  {bookBorrowing ? (
+    <div className="book-details-container">
+      <div className="book-image">
+        {bookBorrowing.book_id ? (
+          <img
+            src={`https://rebook-backend-ldmy.onrender.com${bookBorrowing.book_id.book_photo || '/uploads/default-book.jpg'}`}
+            alt={bookBorrowing.book_id.title || 'Book Image'}
+            style={{ width: '200px', height: '250px' }}
+            onError={(e) => e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg"}
+          />
+        ) : (
+          <p>No Image Available</p>
+        )}
+      </div>
 
-                {bookborrowings ? (
-                    <div>
-                        <h3>Borrowing ID: {bookborrowings.borrowing_id}</h3>
-                        <p><strong>Book Title:</strong> {bookborrowings.book_id?.title || 'N/A'}</p>
-                        <p><strong>Author:</strong> {bookborrowings.book_id?.author || 'N/A'}</p>
-                        <p><strong>User:</strong> {bookborrowings.user_id?.username || 'N/A'}</p>
-                        <p><strong>Status:</strong> {bookborrowings.borrowing_status}</p>
-                        <button onClick={() => handleRequest('accept')}>Accept Request</button>
-                        <button onClick={() => handleRequest('reject')}>Reject Request</button>
-                    </div>
-                ) : (
-                    <p>No request details found.</p>
-                )}
+      <div className="book-details">
+        <h3>Borrowing ID: {bookBorrowing.borrowing_id}</h3>
+        <p><strong>Book Title:</strong> {bookBorrowing.book_id?.title || 'N/A'}</p>
+        <p><strong>Author:</strong> {bookBorrowing.book_id?.author || 'N/A'}</p>
+        <p><strong>User:</strong> {bookBorrowing.user_id?.username || 'N/A'}</p>
+        <p><strong>Status:</strong> {bookBorrowing.borrowing_status}</p>
+        <p><strong>Available copies:</strong> {bookBorrowing.book_id?.available_copies || 'N/A'}</p>
+        <p><strong>Total copies:</strong> {bookBorrowing.book_id?.total_copies || 'N/A'}</p>
+
+        {bookBorrowing.borrowing_status === 'pending' && (
+          <>
+              <button onClick={() => handleRequest('accept')} className="accept-button" style={{background: '#9fed51',border: 'none', borderRadius: '5px', cursor: 'pointer'}}>Accept Request</button>
+              <button onClick={() => handleRequest('reject')} className="reject-button" style={{background: '#ed5151',border: 'none', borderRadius: '5px', cursor: 'pointer'}}>Reject Request</button>
+                        
+          </>
+        )}
+      </div>
+    </div>
+  ) : (
+    <p>No request details found.</p>
+  )}
+</div>
+
             </div>
         </div>
     );
