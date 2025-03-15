@@ -21,6 +21,25 @@ const BookDetailsPage = () => {
     const { token, user } = useAuth(); 
     const { book_id } = useParams();
     const { username } = useAuth();
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            if (!token) return;
+            try {
+                const response = await API.get('/api/users/me/id', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                console.log('User ID response:', response.data);
+                setUserId(response.data.user_id);
+            } catch (err) {
+                console.error('Error fetching user ID:', err);
+            }
+        };
+        fetchUserId();
+    }, [token]);
 
     useEffect(() => {
         const fetchBookDetails = async () => {
@@ -72,7 +91,7 @@ const BookDetailsPage = () => {
             // Handle Image Upload if a new image is selected
             if (imageFile) {
                 const formDataImage = new FormData();
-                formDataImage.append('image', imageFile);
+                formDataImage.append('book_photo', imageFile);
 
                 const imageResponse = await API.post('/api/upload', formDataImage, {
                     headers: {
@@ -81,7 +100,7 @@ const BookDetailsPage = () => {
                     }
                 });
 
-                updatedBookData.book_photo = imageResponse.data.image_url; // Assuming API returns image URL
+                updatedBookData.book_photo = imageResponse.data.fileId; // Assuming API returns file ID
             }
 
             const response = await API.put(`/api/books/${book_id}`, updatedBookData, {
@@ -103,159 +122,101 @@ const BookDetailsPage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
-
-                <h3>
-                    <Link to="/home">
-                        <IoHomeOutline /> Home
-                    </Link>
-                </h3>
-                <h3>
-                    <Link to="/customers">
-                        <LuUsersRound /> Customers
-                    </Link>
-                </h3>
-                <h3>
-                    <Link to="/book-requests">
-                        <RiBookShelfLine /> Book Requests
-                    </Link>
-                </h3>
-                <h3>
-                    <Link to="/book-donations">
-                        <BiDonateHeart /> Book Donations
-                    </Link>
-                </h3>
-                <h3><Link to="/managereturnbooks">
-                    <GrUserManager /> Manage return books
-                  </Link>
-                </h3>
+                <img src='http://localhost:5000/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+                <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
+                <h3><Link to="/customers"><LuUsersRound /> Customers</Link></h3>
+                <h3><Link to="/book-requests"><RiBookShelfLine /> Book Requests</Link></h3>
+                <h3><Link to="/book-donations"><BiDonateHeart /> Book Donations</Link></h3>
+                <h3><Link to="/managereturnbooks"><GrUserManager /> Manage return books</Link></h3>
             </div>
 
             <div className='content'>
                 <header className='header'>
-
                     <h3 className='homepage'>Book Details</h3>
                     <div className='user-info'>
-                    <img src={`https://rebook-backend-ldmy.onrender.com/uploads/${username}`} className='profile-pic' alt="User Profile" />
-                    <span>Hi, {username}</span>
+                    <img src={userId ? `http://localhost:5000/api/users/photo-by-user-id/${userId}` : 'http://localhost:5000/uploads/no_img.jpeg'} 
+                             className='profile-pic' 
+                             alt='User Profile' 
+                             onError={(e) => { e.target.src = 'http://localhost:5000/uploads/no_img.jpeg'; }}
+                        />   <span>Hvvi, {username}</span>
                         <Logout />
                     </div> 
-                    
                 </header>
 
                 {isEditing ? (
-                  <div className='contt'>
-
-                    <div>
-                        <h3>Edit Book Details</h3>
-                        <form>
-                            <label>
-                                Title:
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={formData.title}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Author:
-                                <input
-                                    type="text"
-                                    name="author"
-                                    value={formData.author}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Category:
-                                <input
-                                    type="text"
-                                    name="category"
-                                    value={formData.category}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Status:
-                                <input
-                                    type="text"
-                                    name="book_status"
-                                    value={formData.book_status}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Total Copies:
-                                <input
-                                    type="number"
-                                    name="total_copies"
-                                    value={formData.total_copies}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Available Copies:
-                                <input
-                                    type="number"
-                                    name="available_copies"
-                                    value={formData.available_copies}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                Book Image:
-                                <input
-                                    type="file"
-                                    name="image"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                />
-                            </label>
-                            <br />
-                            <button type="button" onClick={handleSaveChanges}>Save Changes</button>
-                        </form>
-                       </div>
+                    <div className='contt'>
+                        <div>
+                            <h3>Edit Book Details</h3>
+                            <form>
+                                <label>
+                                    Title:
+                                    <input type="text" name="title" value={formData.title} onChange={handleInputChange} />
+                                </label>
+                                <br />
+                                <label>
+                                    Author:
+                                    <input type="text" name="author" value={formData.author} onChange={handleInputChange} />
+                                </label>
+                                <br />
+                                <label>
+                                    Category:
+                                    <input type="text" name="category" value={formData.category} onChange={handleInputChange} />
+                                </label>
+                                <br />
+                                <label>
+                                    Status:
+                                    <input type="text" name="book_status" value={formData.book_status} onChange={handleInputChange} />
+                                </label>
+                                <br />
+                                <label>
+                                    Total Copies:
+                                    <input type="number" name="total_copies" value={formData.total_copies} onChange={handleInputChange} />
+                                </label>
+                                <br />
+                                <label>
+                                    Available Copies:
+                                    <input type="number" name="available_copies" value={formData.available_copies} onChange={handleInputChange} />
+                                </label>
+                                <br />
+                                <label>
+                                    Book Image:
+                                    <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
+                                </label>
+                                <br />
+                                <button type="button" onClick={handleSaveChanges}>Save Changes</button>
+                            </form>
+                        </div>
                     </div>
-
                 ) : (
-                <div className='cont'>
-                     {}
-                     {book.book_photo ? (
-                     <img 
-                     className="book-image" 
-                         src={`https://rebook-backend-ldmy.onrender.com${book.book_photo}`} 
-                         alt={book.title} 
-                         onError={(e) => e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg"}
-                     />
-                     ) : (<p>No Image Available</p>
-                     )}
-
-                     {}
-                   <div className="book-details">
-                          <h3>{book.title}</h3>
-                          <p><strong>Author:</strong> {book.author}</p>
-                          <p><strong>Category:</strong> {book.category}</p>
-                          <p><strong>Status:</strong> {book.book_status}</p>
-                          <p><strong>Total Copies:</strong> {book.total_copies}</p>
-                          <p><strong>Available Copies:</strong> {book.available_copies}</p>
-
-                       {}
-                     <div className="edit-btn" onClick={handleEditToggle}>
-                         <MdOutlineModeEdit /> Edit
-                     </div>
+                    <div className='cont'>
+                        {book.book_photo ? (
+                            <img 
+                                className="book-image" 
+                                src={`http://localhost:5000/api/books/photo/id/${book.book_photo}`} 
+                                alt={book.title} 
+                                onError={(e) => {
+                                    console.error('Image load error:', e);
+                                    e.target.src = "http://localhost:5000/uploads/no_img.jpeg";
+                                }}
+                            />
+                        ) : (
+                            <p>No Image Available</p>
+                        )}
+                        <div className="book-details">
+                            <h3>{book.title}</h3>
+                            <p><strong>Author:</strong> {book.author}</p>
+                            <p><strong>Category:</strong> {book.category}</p>
+                            <p><strong>Status:</strong> {book.book_status}</p>
+                            <p><strong>Total Copies:</strong> {book.total_copies}</p>
+                            <p><strong>Available Copies:</strong> {book.available_copies}</p>
+                            <div className="edit-btn" onClick={handleEditToggle}>
+                                <MdOutlineModeEdit /> Edit
+                            </div>
+                        </div>
+                        {/* Add console log to see book.book_photo */}
+                        {console.log('Book Photo:', book.book_photo)}
                     </div>
-                </div>
-
-                   
                 )}
-             
             </div>
         </div>
     );

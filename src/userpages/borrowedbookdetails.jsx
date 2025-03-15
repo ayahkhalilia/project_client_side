@@ -6,15 +6,36 @@ import { RiBookShelfLine } from 'react-icons/ri';
 import { BiDonateHeart } from 'react-icons/bi';
 import Logout from '../components/logout';
 import { useAuth } from '../context/AuthContext';
+import NotificationBell from '../components/notificationbell';
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { TbTruckDelivery } from "react-icons/tb";
 import '../index.css';
 
 const BorrowedBookDetailsPageUser = () => {
-    const [bookBorrowing, setBookBorrowing] = useState(null);
+    const [borrowedBook, setBorrowedBook] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { token, username } = useAuth();
+    const { token, user } = useAuth();
+    const [currentUserId, setCurrentUserId] = useState(null);
     const { borrowing_id } = useParams();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchCurrentUserId = async () => {
+            if (!token) return;
+            try {
+                const response = await API.get('/api/users/me/id', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.data && response.data.user_id) {
+                    setCurrentUserId(response.data.user_id);
+                }
+            } catch (err) {
+                console.error('Failed to fetch current user ID:', err);
+            }
+        };
+        fetchCurrentUserId();
+    }, [token]);
 
     useEffect(() => {
         const fetchBorrowedBookDetails = async () => {
@@ -25,11 +46,11 @@ const BorrowedBookDetailsPageUser = () => {
             }
             try {
                 const response = await API.get(`/api/books/my-borrowings/${borrowing_id}`, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { 'Authorization': `Bearer ${token}` },
                 });
-                setBookBorrowing(response.data);
+                setBorrowedBook(response.data);
             } catch (err) {
-                setError('Failed to fetch book details from the server');
+                setError('Failed to fetch borrowed book details from the server');
             } finally {
                 setLoading(false);
             }
@@ -59,58 +80,65 @@ const BorrowedBookDetailsPageUser = () => {
     return (
         <div className="nav-bar">
             <div className="bar-rec">
-            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+                <img src='http://localhost:5000/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
                 <h3><Link to="/userhomepage"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/donate-books-userpages"><BiDonateHeart /> Donate Books</Link></h3>
                 <h3><Link to="/borrowed-books-userpages"><RiBookShelfLine /> Borrowed Books</Link></h3>
+                <h3><Link to={"/user-deliveries-page"}><TbTruckDelivery  />Delivery</Link></h3>
+
             </div>
             <div className="content">
-            <header className='header'>
+                <header className='header'>
                     <h3 className='homepage'>Home</h3>        
-                    
-                    {}
                     <div className='user-info'>
-                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
-
-                        <span>Hi, {username}</span>
-                        <Logout /> {}
+                        <img 
+                            src={`http://localhost:5000/api/users/photo-by-user-id/${currentUserId || user?.user_id}`} 
+                            className='profile-pic' 
+                            alt='User Profile'
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "http://localhost:5000/uploads/no_img.jpeg";
+                            }} 
+                        />
+                        <span>Hi, {user?.username || 'Guest'}</span>
+                        <Logout />
                     </div> 
                 </header>
                 <div className='cont'>
-  {bookBorrowing ? (
-    <div className='book-details-container'>
-      <div className='book-image'>
-        {bookBorrowing.book_id?.book_photo ? (
-          <img 
-            src={`https://rebook-backend-ldmy.onrender.com${bookBorrowing.book_id?.book_photo}`} 
-            alt={bookBorrowing.book_id.title} 
-            style={{ width: '200px', height: '250px' }} 
-            onError={(e) => e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/default-book.jpg"} 
-          />
-        ) : (
-          <p>No Image Available</p>
-        )}
-      </div>
-
-      <div className='book-details'>
-        <h3>Borrowing ID: {bookBorrowing.borrowing_id}</h3>
-        <p><strong>Book Title:</strong> {bookBorrowing.book_id?.title || 'N/A'}</p>
-        <p><strong>Author:</strong> {bookBorrowing.book_id?.author || 'N/A'}</p>
-        <p><strong>Status:</strong> {bookBorrowing.borrowing_status}</p>
-
-        {bookBorrowing.borrowing_status === 'borrowed' && (
-          <button onClick={returnBook} className='return-button' style={{ background: '#9fed51', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-            Return Book
-          </button>
-        )}
-      </div>
-    </div>
-  ) : (
-    <p>No book details found.</p>
-  )}
-</div>
-
-          </div>
+                    {borrowedBook ? (
+                        <div className='book-details-container'>
+                            <div className='book-image'>
+                                {borrowedBook.book_id?.book_photo ? (
+                                    <img 
+                                        src={`http://localhost:5000/api/books/photo/id/${borrowedBook.book_id.book_photo}`} 
+                                        alt={borrowedBook.book_id.title} 
+                                        style={{ width: '200px', height: '250px' }} 
+                                        onError={(e) => {
+                                            console.error('Image load error:', e);
+                                            e.target.src = "http://localhost:5000/uploads/no_img.jpeg";
+                                        }} 
+                                    />
+                                ) : (
+                                    <p>No Image Available</p>
+                                )}
+                            </div>
+                            <div className='book-details'>
+                                <h3>Borrowing ID: {borrowedBook.borrowing_id}</h3>
+                                <p><strong>Book Title:</strong> {borrowedBook.book_id?.title || 'N/A'}</p>
+                                <p><strong>Author:</strong> {borrowedBook.book_id?.author || 'N/A'}</p>
+                                <p><strong>Status:</strong> {borrowedBook.borrowing_status}</p>
+                                {borrowedBook.borrowing_status === 'borrowed' && (
+                                    <button onClick={returnBook} className='return-button' style={{ background: '#9fed51', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                                        Return Book
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ) : (
+                        <p>No book details found.</p>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };

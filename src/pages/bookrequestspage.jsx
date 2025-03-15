@@ -17,6 +17,24 @@ const BookRequestsPage = () => {
     const [error, setError] = useState(null);
     const { token } = useAuth();
     const { username } = useAuth();
+    const [userId, setUserId] = useState(null);
+    useEffect(() => {
+        const fetchUserId = async () => {
+            if (!token) return;
+            try {
+                const response = await API.get('/api/users/me/id', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                console.log('User ID response:', response.data);
+                setUserId(response.data.user_id);
+            } catch (err) {
+                console.error('Error fetching user ID:', err);
+            }
+        };
+        fetchUserId();
+    }, [token]);
 
     useEffect(() => {
         const fetchBorrowRequests = async () => {
@@ -49,7 +67,7 @@ const BookRequestsPage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+            <img src='http://localhost:5000/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
 
                 <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/customers"><LuUsersRound /> Customers</Link></h3>
@@ -63,13 +81,16 @@ const BookRequestsPage = () => {
                     <h3 className='homepage'>Book Requests</h3>        
                     {}
                     <div className='user-info'>
-                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
-                        <span>Hi, {username}</span>
+                    <img src={userId ? `http://localhost:5000/api/users/photo-by-user-id/${userId}` : 'http://localhost:5000/uploads/no_img.jpeg'} 
+                             className='profile-pic' 
+                             alt='User Profile' 
+                             onError={(e) => { e.target.src = 'http://localhost:5000/uploads/no_img.jpeg'; }}
+                        />                        <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 
                 </header>
                 <div className='search-bar'>
-                    <SearchBar apiEndpoint="https://rebook-backend-ldmy.onrender.com/api/books" />
+                    <SearchBar apiEndpoint="http://localhost:5000/api/books" />
                 </div> 
                 
                 <div className="books-list">

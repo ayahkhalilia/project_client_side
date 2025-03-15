@@ -4,7 +4,7 @@ import {IoHomeOutline,IoSettingsOutline} from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
 import { RiBookShelfLine } from "react-icons/ri";
 import { BiDonateHeart } from "react-icons/bi";
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import Logout from '../components/logout.jsx';
 import { useAuth } from '../context/AuthContext'; 
@@ -14,59 +14,49 @@ import { TbTruckDelivery } from "react-icons/tb";
 
 import '../index.css';
 
-const UserNotificationsPage=()=>{
-    const [books, setBooks] = useState([]);
-    const [loading, setLoading] = useState(true); 
-    const [error, setError] = useState(null); 
-    const { username } = useAuth();
-    const { token } = useAuth();
-    const [userId, setUserId] = useState(null);
+const UserDeliveries = () => {
+    const [deliveries, setDeliveries] = useState([]);
+    const [error, setError] = useState(null);
+    const { userId } = useAuth(); 
+    const { token, username } = useAuth();
+    const navigate = useNavigate();
     useEffect(() => {
-        const fetchUserId = async () => {
-            if (!token) return;
-            try {
-                const response = await API.get('/api/users/me/id', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                console.log('User ID response:', response.data);
-                setUserId(response.data.user_id);
-            } catch (err) {
-                console.error('Error fetching user ID:', err);
-            }
-        };
-        fetchUserId();
-    }, [token]);
+      const fetchUserId = async () => {
+          if (!token) return;
+          try {
+              const response = await API.get('/api/users/me/id', {
+                  headers: {
+                      'Authorization': `Bearer ${token}`,
+                  },
+              });
+              console.log('User ID response:', response.data);
+              setUserId(response.data.user_id);
+          } catch (err) {
+              console.error('Error fetching user ID:', err);
+          }
+      };
+      fetchUserId();
+  }, [token]);
 
-
+    // Fetch all deliveries for the user
     useEffect(() => {
-        const fetchBooks = async () => {
-            if (!token) {
-                setError('No authentication token found');
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const response = await API.get('/api/books', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                console.log('Books from API:', response.data); 
-                setBooks(response.data);
-            } catch (err) {
-                setError('Failed to fetch books from the server');
-            } finally {
-                setLoading(false);
-            }
-        };
-    
-        fetchBooks();
-    }, [token]);
-    
-
+      const fetchDeliveries = async () => {
+        try {
+          const response = await API.get(`/api/delivery/user/${userId}`);
+          setDeliveries(response.data.deliveries);
+        } catch (error) {
+          setError('Failed to fetch deliveries');
+          console.error('Error fetching deliveries:', error);
+        }
+      };
+  
+      fetchDeliveries();
+    }, [userId]);
+  
+    // Navigate to the delivery tracking page
+    const handleDeliveryClick = (deliveryId) => {
+      navigate(`/user-delivery-tracking-page/${deliveryId}`);
+    };
     const handleSearchResults = (results) => {
         console.log('Search Results:', results); 
         setBooks(results);
@@ -112,10 +102,31 @@ const UserNotificationsPage=()=>{
                 <div className='search-bar'>
                         <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books"} onResults={handleSearchResults} />
                 </div> 
+                <div className="user-deliveries">
+      <h2>Your Deliveries</h2>
+      {error && <p className="error">{error}</p>}
+      {deliveries.length > 0 ? (
+        <ul className="delivery-list">
+          {deliveries.map((delivery) => (
+            <li
+              key={delivery._id}
+              className="delivery-item"
+              onClick={() => handleDeliveryClick(delivery._id)}
+            >
+              <p>Delivery ID: {delivery._id}</p>
+              <p>Status: {delivery.status}</p>
+              <p>Address: {delivery.address}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No deliveries found.</p>
+      )}
+    </div>
             </div>
  
         </div>
     );
 };
 
-export default UserNotificationsPage;
+export default UserDeliveries;
