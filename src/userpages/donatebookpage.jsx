@@ -7,6 +7,9 @@ import { BiDonateHeart } from "react-icons/bi";
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/logout.jsx';
 import { useAuth } from '../context/AuthContext'; 
+import NotificationBell from '../components/notificationbell';
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { TbTruckDelivery } from "react-icons/tb";
 import '../index.css';
 
 const DonateBooksPage = () => {
@@ -19,10 +22,27 @@ const DonateBooksPage = () => {
         book_photo: null,
     });
     const [error, setError] = useState(null);
-    const { token } = useAuth();
+    const { token, username } = useAuth();
     const navigate = useNavigate();
-    const { username } = useAuth();
+    const [userId, setUserId] = useState(null);
 
+    useEffect(() => {
+        const fetchUserId = async () => {
+            if (!token) return;
+            try {
+                const response = await API.get('/api/users/me/id', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                console.log('User ID response:', response.data);
+                setUserId(response.data.user_id);
+            } catch (err) {
+                console.error('Error fetching user ID:', err);
+            }
+        };
+        fetchUserId();
+    }, [token]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -84,103 +104,98 @@ const DonateBooksPage = () => {
 
     return (
         <div className='nav-bar'>
-        <div className='bar-rec'>
-        <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+            <div className='bar-rec'>
+                <img src='http://localhost:5000/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+                <h3><Link to="/userhomepage"><IoHomeOutline /> Home</Link></h3>
+                <h3><Link to="/donate-books-userpages"><BiDonateHeart /> Donate Books</Link></h3>
+                <h3><Link to="/borrowed-books-userpages"><RiBookShelfLine /> Borrowed Books</Link></h3>
+                <h3><Link to={"/user-deliveries-page"}><TbTruckDelivery  />Delivery</Link></h3>
 
-          <h3><Link to="/userhomepage">
-                <IoHomeOutline /> Home
-              </Link> 
-          </h3>
-          <h3><Link to="/donate-books-userpages">
-                <BiDonateHeart /> Donate Books
-              </Link>
-          </h3>
-          <h3><Link to="/borrowed-books-userpages">
-                <RiBookShelfLine /> Borrowed Books
-              </Link>
-          </h3>
-          
-        </div>
+            </div>
+            <div className='content'>
+                <header className='header'>
+                    <h3 className='homepage'>Donate a Book</h3>        
+                    <div className='user-info'>
+                        {userId && (
+                            <img src={`http://localhost:5000/api/users/photo-by-user-id/${userId}`} 
+                                 className='profile-pic' 
+                                 alt='User Profile' 
+                                 onError={(e) => { e.target.src = 'http://localhost:5000/uploads/no_img.jpeg'; }}
+                            />
+                        )}
+                      <h3><Link to='#'><IoIosNotificationsOutline /></Link></h3>                
 
-        
-        <div className='content'>
-            <header className='header'>
-                <h3 className='homepage'>Donate a Book</h3>        
-                
-                {}
-                <div className='user-info'>
-                <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
-                <span>Hi, {username}</span>
-                    <Logout /> {}
-                </div> 
-            </header>
-        <div className="donate-book-page">
-        <div className='contt'>
-
-            <form onSubmit={handleSubmit}>
-            <div>
-                    <input
-                        type="text"
-                        name="book_title"
-                        placeholder="Book Title"
-                        value={formData.book_title}
-                        onChange={handleChange}
-                        required
-                    />
+                        <span>Hi, {username}</span>
+                        <Logout />
+                    </div> 
+                </header>
+                <div className="donate-book-page">
+                    <div className='contt'>
+                        <form onSubmit={handleSubmit}>
+                            <div>
+                                <input
+                                    type="text"
+                                    name="book_title"
+                                    placeholder="Book Title"
+                                    value={formData.book_title}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="text"
+                                    name="book_author"
+                                    placeholder="Author"
+                                    value={formData.book_author}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <select name="book_condition" value={formData.book_condition} onChange={handleChange} required>
+                                    <option value="new">New</option>
+                                    <option value="good">Good</option>
+                                    <option value="worn">Worn</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input
+                                    type="text"
+                                    name="category"
+                                    placeholder="Category"
+                                    value={formData.category}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="number"
+                                    name="publication_year"
+                                    placeholder="Publication Year"
+                                    value={formData.publication_year}
+                                    onChange={handleChange}
+                                    min="1900"
+                                    max={new Date().getFullYear()}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="file"
+                                    name="book_photo"
+                                    onChange={handleFileChange} 
+                                    required
+                                />
+                            </div>
+                            {error && <p className="error-message">{error}</p>}
+                            <button type="submit">Send Donation Request</button>
+                        </form>
+                    </div>
                 </div>
-                <div>
-                    <input
-                        type="text"
-                        name="book_author"
-                        placeholder="Author"
-                        value={formData.book_author}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <select name="book_condition" value={formData.book_condition} onChange={handleChange} required>
-                        <option value="new">New</option>
-                        <option value="good">Good</option>
-                        <option value="worn">Worn</option>
-                    </select>
-                </div>
-                <div>
-                    <input
-                        type="text"
-                        name="category"
-                        placeholder="Category"
-                        value={formData.category}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <input
-                        type="number"
-                        name="publication_year"
-                        placeholder="Publication Year"
-                        value={formData.publication_year}
-                        onChange={handleChange}
-                        min="1900"
-                        max={new Date().getFullYear()}
-                        required
-                    />
-                </div>
-                <div>
-                    <input
-                        type="file"
-                        name="book_photo"
-                        onChange={handleFileChange} 
-                        required
-                    />
-                </div>
-                {error && <p className="error-message">{error}</p>}
-                <button type="submit">Send Donation Request</button>
-                </form></div>
             </div>
         </div>
-      </div>
     );
 };
 

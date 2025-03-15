@@ -20,7 +20,26 @@ const DonationDetailsPage = () => {
     const { token, user } = useAuth(); 
     const { donation_id } = useParams();
     const { username } = useAuth();
+    const [userId, setUserId] = useState(null);
+    
     const navigate = useNavigate(); 
+    useEffect(() => {
+        const fetchUserId = async () => {
+            if (!token) return;
+            try {
+                const response = await API.get('/api/users/me/id', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                console.log('User ID response:', response.data);
+                setUserId(response.data.user_id);
+            } catch (err) {
+                console.error('Error fetching user ID:', err);
+            }
+        };
+        fetchUserId();
+    }, [token]);
 
     useEffect(() => {
         const fetchDonationDetails = async () => {
@@ -79,7 +98,7 @@ const DonationDetailsPage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-                <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px'}}/>
+                <img src='http://localhost:5000/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px'}}/>
                 <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/customers"><LuUsersRound /> Customers</Link></h3>
                 <h3><Link to="/book-requests"><RiBookShelfLine /> Book Requests</Link></h3>
@@ -93,8 +112,11 @@ const DonationDetailsPage = () => {
                     
                     {}
                     <div className='user-info'>
-                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
-                        <span>Hi, {username}</span>
+                    <img src={userId ? `http://localhost:5000/api/users/photo-by-user-id/${userId}` : 'http://localhost:5000/uploads/no_img.jpeg'} 
+                             className='profile-pic' 
+                             alt='User Profile' 
+                             onError={(e) => { e.target.src = 'http://localhost:5000/uploads/no_img.jpeg'; }}
+                        />                        <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 
                 </header>
@@ -102,7 +124,7 @@ const DonationDetailsPage = () => {
                 <div className='cont'>
                     {donation ? (
                         <div className="donation-details">
-                            <img className="book-image" src={`https://rebook-backend-ldmy.onrender.com/uploads/${donation.book_id}.jpg`} alt={donation.book_title} />
+                            <img className="book-image" src={`http://localhost:5000/api/books/photo/id/${donation.book_photo}`} alt={donation.book_title} onError={(e) => e.target.src = "http://localhost:5000/uploads/no_img.jpeg"} />
                             <div className="book-details">
                                 <h3>{donation.book_title}</h3>
                                 <p><strong>Author:</strong> {donation.book_author}</p>

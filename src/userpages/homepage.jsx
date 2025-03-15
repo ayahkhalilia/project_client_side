@@ -8,14 +8,35 @@ import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import Logout from '../components/logout.jsx';
 import { useAuth } from '../context/AuthContext'; 
+import NotificationBell from '../components/notificationbell';
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { TbTruckDelivery } from "react-icons/tb";
 import '../index.css';
 
-const UserHomePage=()=>{
+const UserHomePage = () => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null); 
-    const { token } = useAuth();
-    const { username } = useAuth();
+    const [userId, setUserId] = useState(null);
+    const { token, username } = useAuth();
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            if (!token) return;
+            try {
+                const response = await API.get('/api/users/me/id', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                console.log('User ID response:', response.data);
+                setUserId(response.data.user_id);
+            } catch (err) {
+                console.error('Error fetching user ID:', err);
+            }
+        };
+        fetchUserId();
+    }, [token]);
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -24,7 +45,7 @@ const UserHomePage=()=>{
                 setLoading(false);
                 return;
             }
-
+ 
             try {
                 const response = await API.get('/api/books/customer', {
                     headers: {
@@ -43,80 +64,77 @@ const UserHomePage=()=>{
 
         fetchBooks();
     }, [token]);
-    
 
     const handleSearchResults = (results) => {
         console.log('Search Results:', results); 
         setBooks(results);
     };
 
-    return(
+    return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+                <img src='http://localhost:5000/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+                <h3><Link to="/userhomepage"><IoHomeOutline /> Home</Link></h3>
+                <h3><Link to="/donate-books-userpages"><BiDonateHeart /> Donate Books</Link></h3>
+                <h3><Link to="/borrowed-books-userpages"><RiBookShelfLine /> Borrowed Books</Link></h3>
+                <h3><Link to={"/user-deliveries-page"}><TbTruckDelivery  />Delivery</Link></h3>
 
-              <h3><Link to="/userhomepage">
-                    <IoHomeOutline /> Home
-                  </Link> 
-              </h3>
-              <h3><Link to="/donate-books-userpages">
-                    <BiDonateHeart /> Donate Books
-                  </Link>
-              </h3>
-              <h3><Link to="/borrowed-books-userpages">
-                    <RiBookShelfLine /> Borrowed Books
-                  </Link>
-              </h3>
-              
             </div>
-
-            
             <div className='content'>
+                
                 <header className='header'>
                     <h3 className='homepage'>Home</h3>        
-                    
-                    {}
                     <div className='user-info'>
-                    <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile'/>
+                        <img src={userId ? `http://localhost:5000/api/users/photo-by-user-id/${userId}` : 'http://localhost:5000/uploads/no_img.jpeg'} 
+                             className='profile-pic' 
+                             alt='User Profile' 
+                             onError={(e) => { e.target.src = 'http://localhost:5000/uploads/no_img.jpeg'; }}
+                        />
+                        <NotificationBell customerId={userId} />
 
                         <span>Hi, {username}</span>
-                        <Logout /> {}
+                        <Logout />
                     </div> 
                 </header>
                 <div className='search-bar'>
-                        <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books/customer"} onResults={handleSearchResults} />
+                    <SearchBar apiEndpoint={"http://localhost:5000/api/books/customer"} onResults={handleSearchResults} />
                 </div> 
                 <div className="books-list">
-                  {books.length > 0 ? (
+                    {books.length > 0 ? (
+                        <>
 
-                    <>
-                    <div className="list-header">
-                        <span className="header-item">Book ID</span>
-                        <span className="header-item">Title</span>
-                        <span className="header-item">Author</span>
-                        <span className="header-item">Category</span>
-                        <span className="header-item">Status</span>
-                        <span className="header-item">Total Copies</span>
-                        <span className="header-item">Available Copies</span>
-                    </div>
-                    <ul className='book-items'>
-
-                        {books.map((book,index) => (
-                            <li key={book.book_id || index} className='book-item'><Link to={`/books/customer/${book.book_id}`} className='link-to-detailspage'>
-                                <span>{book.book_id}</span>   <span>{book.title}</span>   <span>{book.author}</span>   
-                                <span>{book.category}</span>   <span>{book.book_status}</span>   
-                                <span>{book.total_copies}</span>   <span>{book.available_copies}</span></Link>
-                            </li>
-                        ))}
-                    </ul>
-                    </>
-                  ) : (
-                    <p>No books available</p>
-                  )}
+                            <div className="list-header">
+                                <span className="header-item">Book ID</span>
+                                <span className="header-item">Title</span>
+                                <span className="header-item">Author</span>
+                                <span className="header-item">Category</span>
+                                <span className="header-item">Status</span>
+                                <span className="header-item">Total Copies</span>
+                                <span className="header-item">Available Copies</span>
+                            </div>
+                            <ul className='book-items'>
+                                {books.map((book, index) => (
+                                    <li key={book.book_id || index} className='book-item'>
+                                        <Link to={`/books/customer/${book.book_id}`} className='link-to-detailspage'>
+                                            <span>{book.book_id}</span>
+                                            <span>{book.title}</span>
+                                            <span>{book.author}</span>
+                                            <span>{book.category}</span>
+                                            <span>{book.book_status}</span>
+                                            <span>{book.total_copies}</span>
+                                            <span>{book.available_copies}</span>
+                                           
+                                            {console.log('Book Photo URL:', `http://localhost:5000/api/books/photo/id/${book.book_photo}`)}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    ) : (
+                        <p>No books available</p>
+                    )}
                 </div>
-                
             </div>
- 
         </div>
     );
 };
