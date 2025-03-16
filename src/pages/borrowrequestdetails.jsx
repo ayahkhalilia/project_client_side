@@ -118,10 +118,10 @@ const handleSearchResults = (results) => {
                 <header className='header'>
                     <h3 className='homepage'>Borrow Request Details</h3>
                     <div className='user-info'>
-                    <img src={userId ? `http://localhost:5000/api/users/photo-by-user-id/${userId}` : 'http://localhost:5000/uploads/no_img.jpeg'} 
+                    <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
                              className='profile-pic' 
                              alt='User Profile' 
-                             onError={(e) => { e.target.src = 'http://localhost:5000/uploads/no_img.jpeg'; }}
+                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
                         />                        <span>Hi, {username}</span>
                         <Logout />
                     </div> 
@@ -132,12 +132,12 @@ const handleSearchResults = (results) => {
                             <div className="book-image">
                                 {bookBorrowing.book_id ? (
                                     <img
-                                        src={`http://localhost:5000/api/books/photo/id/${bookBorrowing.book_id.book_photo}`} 
+                                        src={`https://rebook-backend-ldmy.onrender.com/api/books/photo/id/${bookBorrowing.book_id.book_photo}`} 
                                         alt={bookBorrowing.book_id.title || 'Book Image'}
                                         style={{ width: '200px', height: '250px' }}
                                         onError={(e) => {
                                             console.error('Image load error:', e);
-                                            e.target.src = "http://localhost:5000/uploads/no_img.jpeg";
+                                            e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
                                         }}
                                     />
                                 ) : (

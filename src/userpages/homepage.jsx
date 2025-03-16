@@ -73,7 +73,7 @@ const UserHomePage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-                <img src='http://localhost:5000/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+                <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
                 <h3><Link to="/userhomepage"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/donate-books-userpages"><BiDonateHeart /> Donate Books</Link></h3>
                 <h3><Link to="/borrowed-books-userpages"><RiBookShelfLine /> Borrowed Books</Link></h3>
@@ -85,10 +85,10 @@ const UserHomePage = () => {
                 <header className='header'>
                     <h3 className='homepage'>Home</h3>        
                     <div className='user-info'>
-                        <img src={userId ? `http://localhost:5000/api/users/photo-by-user-id/${userId}` : 'http://localhost:5000/uploads/no_img.jpeg'} 
+                        <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
                              className='profile-pic' 
                              alt='User Profile' 
-                             onError={(e) => { e.target.src = 'http://localhost:5000/uploads/no_img.jpeg'; }}
+                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
                         />
                         <NotificationBell customerId={userId} />
 
@@ -97,7 +97,7 @@ const UserHomePage = () => {
                     </div> 
                 </header>
                 <div className='search-bar'>
-                    <SearchBar apiEndpoint={"http://localhost:5000/api/books/customer"} onResults={handleSearchResults} />
+                    <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books/customer"} onResults={handleSearchResults} />
                 </div> 
                 <div className="books-list">
                     {books.length > 0 ? (
@@ -124,7 +124,7 @@ const UserHomePage = () => {
                                             <span>{book.total_copies}</span>
                                             <span>{book.available_copies}</span>
                                            
-                                            {console.log('Book Photo URL:', `http://localhost:5000/api/books/photo/id/${book.book_photo}`)}
+                                            {console.log('Book Photo URL:', `https://rebook-backend-ldmy.onrender.com/api/books/photo/id/${book.book_photo}`)}
                                         </Link>
                                     </li>
                                 ))}

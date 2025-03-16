@@ -137,10 +137,10 @@ const UserLocationForm = () => {
           <h3 className='homepage'>Delivery Information</h3>
 
           <div className='user-info'>
-          <img src={userId ? `http://localhost:5000/api/users/photo-by-user-id/${userId}` : 'http://localhost:5000/uploads/no_img.jpeg'} 
+          <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
                              className='profile-pic' 
                              alt='User Profile' 
-                             onError={(e) => { e.target.src = 'http://localhost:5000/uploads/no_img.jpeg'; }}
+                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
                         />
             <span>Hi, {username}</span>
             <Logout />

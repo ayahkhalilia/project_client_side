@@ -82,7 +82,7 @@ const CustomersPage = () => {
     return(
         <div className='nav-bar'>
             <div className='bar-rec'>
-            <img src='http://localhost:5000/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
 
               <h3><Link to="/home">
                     <IoHomeOutline /> Home
@@ -113,16 +113,16 @@ const CustomersPage = () => {
                     
                     {}
                     <div className='user-info'>
-                    <img src={userId ? `http://localhost:5000/api/users/photo-by-user-id/${userId}` : 'http://localhost:5000/uploads/no_img.jpeg'} 
+                    <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
                              className='profile-pic' 
                              alt='User Profile' 
-                             onError={(e) => { e.target.src = 'http://localhost:5000/uploads/no_img.jpeg'; }}
+                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
                         />                        <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 
                 </header>
                 <div className='search-bar'>
-                     <SearchBar apiEndpoint={"http://localhost:5000/api/users"} onResults={handleSearchResults} />
+                     <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/users"} onResults={handleSearchResults} />
 
                 </div> 
                 <div className="books-list">

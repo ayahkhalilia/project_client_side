@@ -122,12 +122,12 @@ const AddBookFormPage = () => {
                     <h3 className='homepage'>Add Book Form</h3>
                     <div className='user-info'>
                         {userId ? (
-                            <img src={`http://localhost:5000/api/users/photo-by-user-id/${userId}`} className='profile-pic' alt='User Profile' onError={(e) => {
+                            <img src={`https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}`} className='profile-pic' alt='User Profile' onError={(e) => {
                                 e.target.onerror = null; // Prevent infinite loop if fallback image fails
-                                e.target.src = "http://localhost:5000/uploads/no_img.jpeg";
+                                e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
                             }} />
                         ) : (
-                            <img src="http://localhost:5000/uploads/no_img.jpeg" className='profile-pic' alt='User Profile' />
+                            <img src="https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg" className='profile-pic' alt='User Profile' />
                         )}
                         <span>Hi, {username}</span>
                         <Logout />

@@ -38,15 +38,15 @@ const UserAvatar = ({ className = 'profile-pic', alt = 'User Profile', size = '4
     return (
         <img 
             src={effectiveUserId ? 
-                `http://localhost:5000/api/users/photo-by-user-id/${effectiveUserId}` : 
-                "http://localhost:5000/uploads/no_img.jpeg"
+                `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${effectiveUserId}` : 
+                "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg"
             }
             className={className} 
             alt={alt}
             style={{ width: size, height: size, objectFit: 'cover' }}
             onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "http://localhost:5000/uploads/no_img.jpeg";
+                e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
             }}
         />
     );

@@ -20,6 +20,7 @@ import UserLocationForm from './userpages/userlocationform.jsx';
 import UserNotificationsPage from './userpages/usernotifications.jsx';
 import UserDeliveries from './userpages/userdeliveries.jsx';
 import DeliveryTracking from './userpages/deliverytracking.jsx'
+import CustomerProfile from './userpages/customerprofile.jsx'
 
 import { AuthProvider } from './context/AuthContext';
 
@@ -50,6 +51,7 @@ const App = () => {
             <Route path='/user-notifications-page' element={<UserNotificationsPage/>}/>
             <Route path='/user-deliveries-page' element={<UserDeliveries/>}/>
             <Route path='/user-delivery-tracking-page/:deliveryId' element={<DeliveryTracking/>}/>
+            <Route path='/customer-profile' element={<CustomerProfile/>}/>
 
             </Routes>
         </AuthProvider>

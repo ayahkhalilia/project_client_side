@@ -80,7 +80,7 @@ const BorrowedBookDetailsPageUser = () => {
     return (
         <div className="nav-bar">
             <div className="bar-rec">
-                <img src='http://localhost:5000/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+                <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
                 <h3><Link to="/userhomepage"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/donate-books-userpages"><BiDonateHeart /> Donate Books</Link></h3>
                 <h3><Link to="/borrowed-books-userpages"><RiBookShelfLine /> Borrowed Books</Link></h3>
@@ -92,12 +92,12 @@ const BorrowedBookDetailsPageUser = () => {
                     <h3 className='homepage'>Home</h3>        
                     <div className='user-info'>
                         <img 
-                            src={`http://localhost:5000/api/users/photo-by-user-id/${currentUserId || user?.user_id}`} 
+                            src={`https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${currentUserId || user?.user_id}`} 
                             className='profile-pic' 
                             alt='User Profile'
                             onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = "http://localhost:5000/uploads/no_img.jpeg";
+                                e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
                             }} 
                         />
                         <span>Hi, {user?.username || 'Guest'}</span>
@@ -110,12 +110,12 @@ const BorrowedBookDetailsPageUser = () => {
                             <div className='book-image'>
                                 {borrowedBook.book_id?.book_photo ? (
                                     <img 
-                                        src={`http://localhost:5000/api/books/photo/id/${borrowedBook.book_id.book_photo}`} 
+                                        src={`https://rebook-backend-ldmy.onrender.com/api/books/photo/id/${borrowedBook.book_id.book_photo}`} 
                                         alt={borrowedBook.book_id.title} 
                                         style={{ width: '200px', height: '250px' }} 
                                         onError={(e) => {
                                             console.error('Image load error:', e);
-                                            e.target.src = "http://localhost:5000/uploads/no_img.jpeg";
+                                            e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
                                         }} 
                                     />
                                 ) : (
