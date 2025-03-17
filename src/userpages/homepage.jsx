@@ -90,14 +90,13 @@ const UserHomePage = () => {
                              alt='User Profile' 
                              onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
                         />
-                <SearchBar onResults={handleSearchResults} />
 
                         <span>Hi, {username}</span>
                         <Logout />
                     </div> 
                 </header>
                 <div className='search-bar'>
-                    <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books/customer"} onResults={handleSearchResults} />
+                <SearchBar onResults={handleSearchResults} />
                 </div> 
                 <div className="books-list">
                     {books.length > 0 ? (
