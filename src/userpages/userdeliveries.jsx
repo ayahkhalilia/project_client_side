@@ -30,7 +30,6 @@ const UserDeliveries = () => {
                   },
               });
               console.log('User ID response:', response.data);
-              setUserId(response.data.user_id);
           } catch (err) {
               console.error('Error fetching user ID:', err);
           }
@@ -94,7 +93,8 @@ const UserDeliveries = () => {
                              className='profile-pic' 
                              alt='User Profile' 
                              onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
-                        />                    <h3><Link to='#'><IoIosNotificationsOutline /></Link></h3>                        
+                        />  
+                        <NotificationBell customerId={userId} />                         
                         <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 

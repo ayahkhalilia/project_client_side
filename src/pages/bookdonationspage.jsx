@@ -98,7 +98,7 @@ const BookDonationsPage = () => {
                     </div> 
                 </header>
                 <div className='search-bar'>
-                    <SearchBar apiEndpoint={"api/books/pending-donation-requests"} onResults={handleSearchResults} />
+                <SearchBar onResults={handleSearchResults} searchType="donations" />
                 </div>
                 <div className="books-list">
                     {loading ? (

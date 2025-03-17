@@ -186,7 +186,7 @@ const HomePage = () => {
                 {error && <div className="error-message">{error}</div>}
                 
                 <div className='search-bar'>
-                    <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books"} onResults={handleSearchResults} />
+                <SearchBar onResults={handleSearchResults} />
                 </div>
                 
                 {loading ? (

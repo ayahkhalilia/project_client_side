@@ -62,15 +62,61 @@ const BorrowRequestDetailsPage = () => {
 
     const handleRequest = async (action) => {
         try {
+            console.log('Action:', action);
+            console.log('Borrowing ID:', borrowing_id);
+            console.log('Book Borrowing Data:', bookBorrowing);
+            console.log('customer_id',bookBorrowing.user_id.user_id);
+            // Update borrowing status (accept or reject)
             const response = await API.put(`/api/books/${action}-borrow/${borrowing_id}`, {}, {
                 headers: { 'Authorization': `Bearer ${token}` },
             });
+    
             alert(response.data.message);
+    
+            // Extract user_id correctly
+            const customer_id = bookBorrowing.user_id.user_id || bookBorrowing.user_id?._id;
+            console.log('Customer ID:', customer_id);
+    
+            if (!customer_id) {
+                console.error('Error: Customer ID is undefined');
+                alert('Failed to send notification. Customer ID missing.');
+                return;
+            }
+    
+            // Send a notification to the customer
+            const message = action === 'accept' 
+                ? `Your borrow request for the book has been accepted. Please pick it up at your convenience.` 
+                : `Your borrow request for the book has been rejected.`;
+    
+            await sendNotificationToCustomer(customer_id, message);
+    
             navigate('/book-requests');
         } catch (err) {
+            console.error('Error in handleRequest:', err);
             alert('Failed to process the request');
         }
     };
+    
+    
+    // Function to send a notification to the customer
+    const sendNotificationToCustomer = async (customer_id, message) => {
+        try {
+            const response = await API.post('/api/notifications', {
+                user_id: customer_id,
+                message: message,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+    
+            alert('Notification sent successfully');
+        } catch (err) {
+            console.error('Error sending notification:', err);
+            alert('Failed to send notification');
+        }
+    };
+    
   // Function to check if a book is overdue
   const isBookOverdue = (dueDate) => {
     const today = new Date();
@@ -79,11 +125,11 @@ const BorrowRequestDetailsPage = () => {
 };
 
 // Function to send a notification for overdue books
-const sendOverdueNotification = async (borrowingId, customerId) => {
+const sendOverdueNotification = async (borrowingId, customer_id) => {
     try {
         const response = await API.post('/api/notifications/send-overdue', {
             borrowing_id: borrowingId,
-            customer_id: customerId,
+            customer_id: customer_id,
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`,

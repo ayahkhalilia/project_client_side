@@ -56,6 +56,11 @@ const ManageReturnBooks = () => {
         fetchBookBorrowings();
     }, [token]);
 
+    const handleSearchResults = (results) => {
+        console.log('Search Results:', results); 
+        setBookborrowings(results);
+    };
+
     const isBookOverdue = (dueDate) => new Date() > new Date(dueDate);
 
     const sendNotificationsToAll = async () => {
@@ -115,7 +120,7 @@ const ManageReturnBooks = () => {
                 </header>
 
                 <div className='search-bar'>
-                    <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books"} />
+                <SearchBar onResults={handleSearchResults} searchType="manage-requests" />
                 </div>
 
                 <button className="send-all-btn" onClick={sendNotificationsToAll}>

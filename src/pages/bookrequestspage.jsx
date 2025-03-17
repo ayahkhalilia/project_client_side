@@ -90,7 +90,7 @@ const BookRequestsPage = () => {
                     </div> 
                 </header>
                 <div className='search-bar'>
-                    <SearchBar apiEndpoint="https://rebook-backend-ldmy.onrender.com/api/books" />
+                <SearchBar onResults={setBookborrowings} searchType="borrow-requests"/>
                 </div> 
                 
                 <div className="books-list">

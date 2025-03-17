@@ -1,50 +1,68 @@
-import React, { useState, useRef } from 'react';
-import axios from 'axios';
-import { debounce } from 'lodash';
+import React, { useState } from 'react';
+import API from '../axiosConfig'; // Ensures it uses the correct API configuration
+import { useAuth } from '../context/AuthContext'; 
 
-const SearchBar = ({ apiEndpoint, onResults }) => {
-    const [query, setQuery] = useState("");
-    const [loading, setLoading] = useState(false);  // Add loading state for search
-    const timeoutRef = useRef(null);
+const SearchBar = ({ onResults, searchType }) => {
+    const [query, setQuery] = useState('');
+    const { token } = useAuth(); // Get auth token from context
 
-    const handleInputChange = (e) => {
-        setQuery(e.target.value);
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-        }
-        timeoutRef.current = setTimeout(() => handleSearch(e.target.value), 500);  // 500ms debounce
-    };
+    const handleSearch = async (e) => {
+        e.preventDefault();
 
-    const handleSearch = async (searchQuery) => {
-        if (searchQuery.trim() === "") {
-            onResults([]);  // Clear results if the query is empty
+        if (!query.trim()) {
+            console.log("Empty search query");
             return;
         }
 
-        setLoading(true);
+        // Determine the API endpoint dynamically based on searchType
+        let endpoint = '';
+        if (searchType === 'borrow-requests') {
+            endpoint = '/api/books/borrow-requests/search';
+        } else if (searchType === 'donations') {
+            endpoint = '/api/books/donations/searchdonations'; // Donation search endpoint
+        } else if (searchType === 'manage-requests') {
+            endpoint = '/api/books/borrowings/searchManageRequests'; // Manage borrow requests search
+        } else {
+            endpoint = '/api/books/search'; // Default for book search
+        }
 
         try {
-            const response = await axios.get(`${apiEndpoint}?query=${searchQuery}`);
-            onResults(response.data);  // Pass the search results to parent
-        } catch (error) {
-            console.error("Error fetching data:", error);
-            onResults([]);  // Clear results if an error occurs
-        } finally {
-            setLoading(false);
+            const response = await API.get(endpoint, {
+                params: { query: encodeURIComponent(query) }, // Ensures query is URL-safe
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Include token in request
+                }
+            });
+
+            if (response.data) {
+                console.log("Search results:", response.data);
+                onResults(response.data); // Pass results to parent component
+            } else {
+                console.error("No data returned from search");
+            }
+        } catch (err) {
+            console.error("Error fetching search results:", err.response ? err.response.data : err);
         }
     };
 
     return (
-        <div>
+        <form onSubmit={handleSearch}>
             <input
                 type="text"
-                placeholder="Search books..."
+                placeholder={
+                    searchType === 'borrow-requests' ? 
+                    "Search borrow requests by title, ID, or customer" : 
+                    searchType === 'donations' ?
+                    "Search donations by title, author, ID, or donor name" :
+                    searchType === 'manage-requests' ?
+                    "Search borrowed requests by title, ID, customer or due date like 2025-03-30" :
+                    "Search books by title, author, or ID"
+                }
                 value={query}
-                onChange={handleInputChange}
+                onChange={(e) => setQuery(e.target.value)}
             />
-            <button onClick={() => handleSearch(query)}>Search</button>
-            {loading && <p>Searching...</p>}
-        </div>
+            <button type="submit">Search</button>
+        </form>
     );
 };
 

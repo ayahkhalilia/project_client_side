@@ -15,9 +15,11 @@ const BorrowedBookDetailsPageUser = () => {
     const [borrowedBook, setBorrowedBook] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { token, user } = useAuth();
+    const { token, user,username } = useAuth();
     const [currentUserId, setCurrentUserId] = useState(null);
     const { borrowing_id } = useParams();
+    const [userId, setUserId] = useState(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,6 +31,7 @@ const BorrowedBookDetailsPageUser = () => {
                 });
                 if (response.data && response.data.user_id) {
                     setCurrentUserId(response.data.user_id);
+                    setUserId(response.data.user_id);
                 }
             } catch (err) {
                 console.error('Failed to fetch current user ID:', err);
@@ -100,7 +103,8 @@ const BorrowedBookDetailsPageUser = () => {
                                 e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
                             }} 
                         />
-                        <span>Hi, {user?.username || 'Guest'}</span>
+                       <NotificationBell customerId={userId} />
+                        <span>Hi, {username}</span>
                         <Logout />
                     </div> 
                 </header>

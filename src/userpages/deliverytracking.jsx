@@ -29,6 +29,8 @@ const DeliveryTracking = () => {
   const [delivery, setDelivery] = useState(null);
   const [error, setError] = useState(null);
   const { username } = useAuth();
+  const [userId, setUserId] = useState(null);
+  
   const navigate = useNavigate();
 
   // Fetch delivery details
@@ -96,8 +98,7 @@ const DeliveryTracking = () => {
           {}
           <div className='user-info'>
             <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile' />
-            <h3><Link to='#'><IoIosNotificationsOutline /></Link></h3>
-            <span>Hi, {username}</span>
+            <NotificationBell customerId={userId} />            <span>Hi, {username}</span>
             <Logout /> {}
           </div>
         </header>

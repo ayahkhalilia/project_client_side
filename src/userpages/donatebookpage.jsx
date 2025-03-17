@@ -123,7 +123,7 @@ const DonateBooksPage = () => {
                                  onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
                             />
                         )}
-                      <h3><Link to='#'><IoIosNotificationsOutline /></Link></h3>                
+            <NotificationBell customerId={userId} /> 
 
                         <span>Hi, {username}</span>
                         <Logout />

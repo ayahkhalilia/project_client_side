@@ -127,9 +127,9 @@ const BookDetailsPageUser = () => {
                              alt='User Profile' 
                              onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
                         />
-                                                <NotificationBell customerId={userId} />
+                         <NotificationBell customerId={userId} />
 
-                        <span>Hi, {username || 'Guest'}</span>
+                        <span>Hi, {username}</span>
                         <Logout />
                     </div> 
                 </header>

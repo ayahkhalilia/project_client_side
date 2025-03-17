@@ -90,7 +90,7 @@ const UserHomePage = () => {
                              alt='User Profile' 
                              onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
                         />
-                        <NotificationBell customerId={userId} />
+                <SearchBar onResults={handleSearchResults} />
 
                         <span>Hi, {username}</span>
                         <Logout />
