@@ -93,7 +93,7 @@ const DeliveryTracking = () => {
 
       <div className='content'>
         <header className='header'>
-          <h3 className='homepage'>Home</h3>
+          <h3 className='homepage'>Your delivery</h3>
 
           {}
           <div className='user-info'>
