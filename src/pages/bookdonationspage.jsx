@@ -5,7 +5,7 @@ import { RiBookShelfLine } from 'react-icons/ri';
 import { BiDonateHeart } from 'react-icons/bi';
 import { MdOutlineDoorFront, MdOutlineDelete } from 'react-icons/md';
 import { GrUserManager } from 'react-icons/gr';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import Logout from '../components/logout.jsx';
 import { useAuth } from '../context/AuthContext';
@@ -16,54 +16,57 @@ const BookDonationsPage = () => {
     const [donations, setDonations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { token } = useAuth(); 
+    const { token, user, loading: authLoading } = useAuth();
     const { username } = useAuth();
     const [userId, setUserId] = useState(null);
-    useEffect(() => {
-        const fetchUserId = async () => {
-            if (!token) return;
-            try {
-                const response = await API.get('/api/users/me/id', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                console.log('User ID response:', response.data);
-                setUserId(response.data.user_id);
-            } catch (err) {
-                console.error('Error fetching user ID:', err);
+    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
+    
+    const navigate = useNavigate();
+   // Update your fetchUserId function
+useEffect(() => {
+    const fetchUserId = async () => {
+        if (!token) return;
+        try {
+            const response = await API.get('/api/users/me/id', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            // Correctly access the nested user_id in the response
+            if (response.data && response.data.data && response.data.data.user_id) {
+                setUserId(response.data.data.user_id);
             }
-        };
-        fetchUserId();
-    }, [token]);
+        } catch (err) {
+            console.error('Error fetching user ID:', err);
+        }
+    };
+    fetchUserId();
+}, [token]);
 
     useEffect(() => {
+        if (authLoading || !token) return;
+
         const fetchPendingDonations = async () => {
-            if (!token) {
-                setError('No authentication token found');
-                setLoading(false);
-                return;
-            }
-
-            try {
-                console.log('Fetching pending donation requests...');
-                const response = await API.get('/api/books/pending-donation-requests', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                console.log('API Response:', response.data);
-                setDonations(response.data);
-            } catch (err) {
-                setError('Failed to fetch donation requests from the server');
-                console.error('Error fetching donation requests:', err);
-            } finally {
+            try{
+               setLoading(true); 
+               const response=await API.get('/api/books/pending-donation-requests', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            console.log('Donations from API:',response.data);
+            setDonations(response.data);
+            setError(null);
+            }catch(err){
+                console.error('Error fetching donations:',err);
+                setError('Failed to fetch donations from the server')
+            }finally {
                 setLoading(false);
             }
         };
-
         fetchPendingDonations();
-    }, [token]);
+    },[token,authLoading]);
+
 
     const handleSearchResults = (results) => {
         console.log('Search Results:', results); 
@@ -75,7 +78,7 @@ const BookDonationsPage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+            <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{width:'200px', height:'auto'}}/>
 
                 <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/customers"><LuUsersRound /> Customers</Link></h3>
@@ -89,11 +92,14 @@ const BookDonationsPage = () => {
                     <h3 className='homepage'>Donation Requests</h3>
                     {}
                     <div className='user-info'>
-                    <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
-                             className='profile-pic' 
-                             alt='User Profile' 
-                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
-                        />                        <span>Hi, {username}</span>
+                    <img 
+    src={userId ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` : `${BASE_URL}/uploads/no_img.jpeg`} 
+    className='profile-pic' 
+    alt='User Profile'
+    crossOrigin="anonymous" 
+    onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
+/>                    
+                        <span>Hi, {username}</span>
                         <Logout /> {}
                     </div> 
                 </header>

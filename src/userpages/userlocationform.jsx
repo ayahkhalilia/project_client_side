@@ -25,23 +25,8 @@ const UserLocationForm = () => {
     const [userId, setUserId] = useState(null);
     const { token, username } = useAuth();
     const navigate = useNavigate();
-    useEffect(() => {
-        const fetchUserId = async () => {
-            if (!token) return;
-            try {
-                const response = await API.get('/api/users/me/id', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                console.log('User ID response:', response.data);
-                setUserId(response.data.user_id);
-            } catch (err) {
-                console.error('Error fetching user ID:', err);
-            }
-        };
-        fetchUserId();
-    }, [token]);
+    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
+
 
   // State for delivery information
   const [deliveryInfo, setDeliveryInfo] = useState({
@@ -53,6 +38,25 @@ const UserLocationForm = () => {
     latitude: null, // Latitude from the map
     longitude: null, // Longitude from the map
   });
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            if (!token) return;
+            try {
+                const response = await API.get('/api/users/me/id', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                console.log('User ID response:', response.data);
+                setUserId(response.data.data.user_id);
+            } catch (err) {
+                console.error('Error fetching user ID:', err);
+            }
+        };
+        fetchUserId();
+    }, [token]);
+
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -107,11 +111,8 @@ const UserLocationForm = () => {
   return (
     <div className='nav-bar'>
       <div className='bar-rec'>
-        <img
-          src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg'
-          alt='Logo'
-          style={{ width: '200px', height: 'auto' }}
-        />
+      <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{width:'200px', height:'auto'}}/>
+
 
         <h3>
           <Link to='/userhomepage'>
@@ -137,11 +138,13 @@ const UserLocationForm = () => {
           <h3 className='homepage'>Delivery Information</h3>
 
           <div className='user-info'>
-          <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
-                             className='profile-pic' 
-                             alt='User Profile' 
-                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
-                        />
+          <img 
+    src={userId ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` : `${BASE_URL}/uploads/no_img.jpeg`} 
+    className='profile-pic' 
+    alt='User Profile'
+    crossOrigin="anonymous" 
+    onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
+/>
                                     <NotificationBell customerId={userId} />     
 
             <span>Hi, {username}</span>

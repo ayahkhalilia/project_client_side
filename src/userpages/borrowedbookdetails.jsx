@@ -1,43 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import API from '../axiosConfig';
-import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
+import { IoHomeOutline } from 'react-icons/io5';
 import { RiBookShelfLine } from 'react-icons/ri';
 import { BiDonateHeart } from 'react-icons/bi';
 import Logout from '../components/logout';
 import { useAuth } from '../context/AuthContext';
 import NotificationBell from '../components/notificationbell';
-import { IoIosNotificationsOutline } from "react-icons/io";
-import { TbTruckDelivery } from "react-icons/tb";
+import { TbTruckDelivery } from 'react-icons/tb';
 import '../index.css';
 
 const BorrowedBookDetailsPageUser = () => {
     const [borrowedBook, setBorrowedBook] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { token, user,username } = useAuth();
-    const [currentUserId, setCurrentUserId] = useState(null);
-    const { borrowing_id } = useParams();
+    const { token, username } = useAuth();
     const [userId, setUserId] = useState(null);
-
+    const { borrowing_id } = useParams();
     const navigate = useNavigate();
 
+    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
+
     useEffect(() => {
-        const fetchCurrentUserId = async () => {
+        const fetchUserId = async () => {
             if (!token) return;
             try {
                 const response = await API.get('/api/users/me/id', {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                 });
-                if (response.data && response.data.user_id) {
-                    setCurrentUserId(response.data.user_id);
-                    setUserId(response.data.user_id);
-                }
+                console.log('User ID response:', response.data);
+                setUserId(response.data.data.user_id);
             } catch (err) {
-                console.error('Failed to fetch current user ID:', err);
+                console.error('Error fetching user ID:', err);
             }
         };
-        fetchCurrentUserId();
+        fetchUserId();
     }, [token]);
 
     useEffect(() => {
@@ -79,31 +78,31 @@ const BorrowedBookDetailsPageUser = () => {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
-
     return (
         <div className="nav-bar">
             <div className="bar-rec">
-                <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+                <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{width:'200px',height:'auto'}}/>
                 <h3><Link to="/userhomepage"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/donate-books-userpages"><BiDonateHeart /> Donate Books</Link></h3>
                 <h3><Link to="/borrowed-books-userpages"><RiBookShelfLine /> Borrowed Books</Link></h3>
                 <h3><Link to={"/user-deliveries-page"}><TbTruckDelivery  />Delivery</Link></h3>
-
             </div>
             <div className="content">
                 <header className='header'>
-                    <h3 className='homepage'>Home</h3>        
+                    <h3 className='homepage'>Details</h3>        
                     <div className='user-info'>
                         <img 
-                            src={`https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${currentUserId || user?.user_id}`} 
-                            className='profile-pic' 
+                            src={userId 
+                                ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` 
+                                : `${BASE_URL}/uploads/no_img.jpeg`
+                            }
+                            className='profile-pic'
                             alt='User Profile'
-                            onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
-                            }} 
+                            onError={(e) => { 
+                                e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; 
+                            }}
                         />
-                       <NotificationBell customerId={userId} />
+                        <NotificationBell customerId={userId} />
                         <span>Hi, {username}</span>
                         <Logout />
                     </div> 
@@ -113,15 +112,19 @@ const BorrowedBookDetailsPageUser = () => {
                         <div className='book-details-container'>
                             <div className='book-image'>
                                 {borrowedBook.book_id?.book_photo ? (
+                                    <>
+                                            {console.log('Book Photo ID:', borrowedBook.book_id.book_photo)}
+
                                     <img 
-                                        src={`https://rebook-backend-ldmy.onrender.com/api/books/photo/id/${borrowedBook.book_id.book_photo}`} 
+                                        src={`${BASE_URL}/api/books/photo/id/${borrowedBook.book_id.book_photo}`} 
                                         alt={borrowedBook.book_id.title} 
                                         style={{ width: '200px', height: '250px' }} 
                                         onError={(e) => {
                                             console.error('Image load error:', e);
-                                            e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
-                                        }} 
-                                    />
+                                            console.error('Failed URL:', `${BASE_URL}/api/books/photo/id/${borrowedBook.book_id.book_photo}`);
+                                            e.target.src = `${BASE_URL}/uploads/no_img.jpeg`;
+                                        }}
+                                    /></>
                                 ) : (
                                     <p>No Image Available</p>
                                 )}

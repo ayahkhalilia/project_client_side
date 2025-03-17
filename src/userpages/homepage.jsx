@@ -18,19 +18,23 @@ const UserHomePage = () => {
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null); 
     const [userId, setUserId] = useState(null);
-    const { token, username } = useAuth();
+    const { token, username, authLoading } = useAuth();
+    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
 
     useEffect(() => {
         const fetchUserId = async () => {
             if (!token) return;
             try {
-                const response = await API.get('/api/users/me/id', {
+                const idResponse = await API.get('/api/users/me/id', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                console.log('User ID response:', response.data);
-                setUserId(response.data.user_id);
+                
+                if (idResponse.data && idResponse.data.data && idResponse.data.data.user_id) {
+                    const id = idResponse.data.data.user_id;
+                    setUserId(id);
+                }
             } catch (err) {
                 console.error('Error fetching user ID:', err);
             }
@@ -39,6 +43,8 @@ const UserHomePage = () => {
     }, [token]);
 
     useEffect(() => {
+        if (authLoading || !token) return;
+
         const fetchBooks = async () => {
             if (!token) {
                 setError('No authentication token found');
@@ -63,7 +69,7 @@ const UserHomePage = () => {
         };
 
         fetchBooks();
-    }, [token]);
+    }, [token,authLoading]);
 
     const handleSearchResults = (results) => {
         console.log('Search Results:', results); 
@@ -73,7 +79,13 @@ const UserHomePage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-                <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+            <img 
+                    src={`${BASE_URL}/uploads/brown_logo.jpg`} 
+                    alt='Logo' 
+                    style={{ width: '200px', height: 'auto' }}
+                    crossOrigin="anonymous"
+                    onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
+                />                
                 <h3><Link to="/userhomepage"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/donate-books-userpages"><BiDonateHeart /> Donate Books</Link></h3>
                 <h3><Link to="/borrowed-books-userpages"><RiBookShelfLine /> Borrowed Books</Link></h3>
@@ -85,10 +97,17 @@ const UserHomePage = () => {
                 <header className='header'>
                     <h3 className='homepage'>Home</h3>        
                     <div className='user-info'>
-                        <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
-                             className='profile-pic' 
-                             alt='User Profile' 
-                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
+                    <img
+                            src={userId 
+                                ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` 
+                                : `${BASE_URL}/uploads/no_img.jpeg`
+                            }
+                            alt='User Profile'
+                            className='profile-pic'
+                            crossOrigin="anonymous"
+                            onError={(e) => { 
+                                e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; 
+                            }}
                         />
                         <NotificationBell customerId={userId} />
                         <span>Hi, {username}</span>

@@ -22,6 +22,7 @@ const BookDetailsPage = () => {
     const { book_id } = useParams();
     const { username } = useAuth();
     const [userId, setUserId] = useState(null);
+    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -32,8 +33,10 @@ const BookDetailsPage = () => {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
+                if (response.data && response.data.data && response.data.data.user_id) {
+                    setUserId(response.data.data.user_id);
+                }
                 console.log('User ID response:', response.data);
-                setUserId(response.data.user_id);
             } catch (err) {
                 console.error('Error fetching user ID:', err);
             }
@@ -122,8 +125,8 @@ const BookDetailsPage = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-                <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
-                <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
+            <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{width:'200px',height:'auto'}}/>
+            <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/customers"><LuUsersRound /> Customers</Link></h3>
                 <h3><Link to="/book-requests"><RiBookShelfLine /> Book Requests</Link></h3>
                 <h3><Link to="/book-donations"><BiDonateHeart /> Book Donations</Link></h3>
@@ -134,11 +137,14 @@ const BookDetailsPage = () => {
                 <header className='header'>
                     <h3 className='homepage'>Book Details</h3>
                     <div className='user-info'>
-                    <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
-                             className='profile-pic' 
-                             alt='User Profile' 
-                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
-                        />   <span>Hvvi, {username}</span>
+                    <img 
+                            src={userId ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` : `${BASE_URL}/uploads/no_img.jpeg`} 
+                            className='profile-pic' 
+                            alt='User Profile'
+                            crossOrigin="anonymous" 
+                            onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
+                        />  
+                        <span>Hi, {username}</span>
                         <Logout />
                     </div> 
                 </header>
@@ -190,14 +196,13 @@ const BookDetailsPage = () => {
                 ) : (
                     <div className='cont'>
                         {book.book_photo ? (
-                            <img 
-                                className="book-image" 
-                                src={`https://rebook-backend-ldmy.onrender.com/api/books/photo/id/${book.book_photo}`} 
-                                alt={book.title} 
-                                onError={(e) => {
-                                    console.error('Image load error:', e);
-                                    e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
-                                }}
+                            <img
+                            src={`${BASE_URL}/api/books/photo/${book.book_photo}`}
+                            alt={book.title}
+                            className="book-thumbnail"
+                            crossOrigin="anonymous"
+                            onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
+                            style={{ width: '200px', height: '250px', objectFit: 'cover' }}
                             />
                         ) : (
                             <p>No Image Available</p>

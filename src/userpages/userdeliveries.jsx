@@ -17,19 +17,25 @@ import '../index.css';
 const UserDeliveries = () => {
     const [deliveries, setDeliveries] = useState([]);
     const [error, setError] = useState(null);
-    const { userId } = useAuth(); 
-    const { token, username } = useAuth();
+    const [userId, setUserId] = useState(null);
+    const { token, username, authLoading } = useAuth();
+    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
+
     const navigate = useNavigate();
     useEffect(() => {
       const fetchUserId = async () => {
           if (!token) return;
           try {
-              const response = await API.get('/api/users/me/id', {
+              const idResponse = await API.get('/api/users/me/id', {
                   headers: {
                       'Authorization': `Bearer ${token}`,
                   },
               });
-              console.log('User ID response:', response.data);
+              
+              if (idResponse.data && idResponse.data.data && idResponse.data.data.user_id) {
+                  const id = idResponse.data.data.user_id;
+                  setUserId(id);
+              }
           } catch (err) {
               console.error('Error fetching user ID:', err);
           }
@@ -64,7 +70,7 @@ const UserDeliveries = () => {
     return(
         <div className='nav-bar'>
             <div className='bar-rec'>
-            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+            <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{width:'200px',height:'auto'}}/>
 
               <h3><Link to="/userhomepage">
                     <IoHomeOutline /> Home
@@ -85,15 +91,22 @@ const UserDeliveries = () => {
             
             <div className='content'>
                 <header className='header'>
-                    <h3 className='homepage'>Home</h3>        
+                    <h3 className='homepage'>Deliveries</h3>        
                     
                     {}
                     <div className='user-info'>
-                    <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
-                             className='profile-pic' 
-                             alt='User Profile' 
-                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
-                        />  
+                    <img
+                            src={userId 
+                                ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` 
+                                : `${BASE_URL}/uploads/no_img.jpeg`
+                            }
+                            alt='User Profile'
+                            className='profile-pic'
+                            crossOrigin="anonymous"
+                            onError={(e) => { 
+                                e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; 
+                            }}
+                        /> 
                         <NotificationBell customerId={userId} />                         
                         <span>Hi, {username}</span>
                         <Logout /> {}

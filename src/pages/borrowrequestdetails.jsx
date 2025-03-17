@@ -18,25 +18,28 @@ const BorrowRequestDetailsPage = () => {
     const { token, username } = useAuth();
     const { borrowing_id } = useParams();
     const [userId, setUserId] = useState(null);
+    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
 
     const navigate = useNavigate();
     useEffect(() => {
-      const fetchUserId = async () => {
-          if (!token) return;
-          try {
-              const response = await API.get('/api/users/me/id', {
-                  headers: {
-                      'Authorization': `Bearer ${token}`,
-                  },
-              });
-              console.log('User ID response:', response.data);
-              setUserId(response.data.user_id);
-          } catch (err) {
-              console.error('Error fetching user ID:', err);
-          }
-      };
-      fetchUserId();
-  }, [token]);
+        const fetchUserId = async () => {
+            if (!token) return;
+            try {
+                const response = await API.get('/api/users/me/id', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                // Correctly access the nested user_id in the response
+                if (response.data && response.data.data && response.data.data.user_id) {
+                    setUserId(response.data.data.user_id);
+                }
+            } catch (err) {
+                console.error('Error fetching user ID:', err);
+            }
+        };
+        fetchUserId();
+    }, [token]);
 
     useEffect(() => {
         const fetchRequestDetails = async () => {
@@ -150,7 +153,7 @@ const handleSearchResults = (results) => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-            <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{width:'200px',height:'auto'}}/>
+            <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{width:'200px',height:'auto'}}/>
 
                 <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/customers"><LuUsersRound /> Customers</Link></h3>
@@ -164,11 +167,14 @@ const handleSearchResults = (results) => {
                 <header className='header'>
                     <h3 className='homepage'>Borrow Request Details</h3>
                     <div className='user-info'>
-                    <img src={userId ? `https://rebook-backend-ldmy.onrender.com/api/users/photo-by-user-id/${userId}` : 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'} 
-                             className='profile-pic' 
-                             alt='User Profile' 
-                             onError={(e) => { e.target.src = 'https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg'; }}
-                        />                        <span>Hi, {username}</span>
+                    <img 
+                            src={userId ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` : `${BASE_URL}/uploads/no_img.jpeg`} 
+                            className='profile-pic' 
+                            alt='User Profile'
+                            crossOrigin="anonymous" 
+                            onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
+                        />                       
+                        <span>Hi, {username}</span>
                         <Logout />
                     </div> 
                 </header>
@@ -178,14 +184,15 @@ const handleSearchResults = (results) => {
                             <div className="book-image">
                                 {bookBorrowing.book_id ? (
                                     <img
-                                        src={`https://rebook-backend-ldmy.onrender.com/api/books/photo/id/${bookBorrowing.book_id.book_photo}`} 
-                                        alt={bookBorrowing.book_id.title || 'Book Image'}
-                                        style={{ width: '200px', height: '250px' }}
-                                        onError={(e) => {
-                                            console.error('Image load error:', e);
-                                            e.target.src = "https://rebook-backend-ldmy.onrender.com/uploads/no_img.jpeg";
-                                        }}
-                                    />
+                                    src={`${BASE_URL}/api/books/photo/${bookBorrowing.book_id.book_photo}`}
+                                    alt={bookBorrowing.book_id.title || 'Book Image'}
+                                    style={{ width: '200px', height: '250px' }}
+                                    crossOrigin="anonymous"
+                                    onError={(e) => {
+                                        console.error('Image load error:', e);
+                                        e.target.src = `${BASE_URL}/uploads/no_img.jpeg`;
+                                    }}
+                                />
                                 ) : (
                                     <p>No Image Available</p>
                                 )}
