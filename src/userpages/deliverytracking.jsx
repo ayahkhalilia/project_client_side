@@ -28,10 +28,32 @@ const DeliveryTracking = () => {
   const { deliveryId } = useParams();
   const [delivery, setDelivery] = useState(null);
   const [error, setError] = useState(null);
-  const { username } = useAuth();
+    const { token, username, authLoading } = useAuth();
   const [userId, setUserId] = useState(null);
-  
+  const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+        if (!token) return;
+        try {
+            const idResponse = await API.get('/api/users/me/id', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            
+            if (idResponse.data && idResponse.data.data && idResponse.data.data.user_id) {
+                const id = idResponse.data.data.user_id;
+                setUserId(id);
+            }
+        } catch (err) {
+            console.error('Error fetching user ID:', err);
+        }
+    };
+    fetchUserId();
+}, [token]);
 
   // Fetch delivery details
   useEffect(() => {
@@ -72,7 +94,7 @@ const DeliveryTracking = () => {
   return (
     <div className='nav-bar'>
       <div className='bar-rec'>
-        <img src='https://rebook-backend-ldmy.onrender.com/uploads/brown_logo.jpg' alt='Logo' style={{ width: '200px', height: 'auto' }} />
+      <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{width:'200px',height:'auto'}}/>
 
         <h3><Link to="/userhomepage">
           <IoHomeOutline /> Home
@@ -97,8 +119,15 @@ const DeliveryTracking = () => {
 
           {}
           <div className='user-info'>
-            <img src={(`https://rebook-backend-ldmy.onrender.com/uploads/${username}.jpg`)} className='profile-pic' alt='User Profile' />
-            <NotificationBell customerId={userId} />            <span>Hi, {username}</span>
+          <img 
+    src={userId ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` : `${BASE_URL}/uploads/no_img.jpeg`} 
+    className='profile-pic' 
+    alt='User Profile'
+    crossOrigin="anonymous" 
+    onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
+/>
+          <NotificationBell customerId={userId} />            
+            <span>Hi, {username}</span>
             <Logout /> {}
           </div>
         </header>
