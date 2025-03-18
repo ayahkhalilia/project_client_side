@@ -73,15 +73,23 @@ const DeliveryTracking = () => {
   // Handle delivery confirmation
   const handleConfirmDelivery = async () => {
     try {
-      const response = await API.patch(`/api/delivery/${deliveryId}/confirm`);
-      if (response.data.success) {
-        alert('Delivery confirmed successfully!');
-        navigate('/user-deliveries-page'); // Redirect to the deliveries page
-      }
+        console.log(`Sending PATCH request to: /api/delivery/${deliveryId}/confirm`);
+        
+        const response = await API.patch(`/api/delivery/${deliveryId}/confirm`);
+        
+        console.log("Response:", response.data);
+
+        if (response.data.success) {
+            alert('Delivery confirmed successfully!');
+            navigate('/user-deliveries-page'); // Redirect to the deliveries page
+        } else {
+            console.error('Error: API did not return success:', response.data);
+        }
     } catch (error) {
-      console.error('Error confirming delivery:', error);
+        console.error('Error confirming delivery:', error);
     }
-  };
+};
+
 
   if (error) {
     return <p>{error}</p>;
