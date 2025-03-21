@@ -1006,3 +1006,322 @@ color: #000000;
   color: red;
   text-align: center;
 }
+
+
+/* Customer Details Page Styles */
+
+/* Main Container */
+.customer-details-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Loading and Error States */
+.loading-spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #decdbc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #ffebee;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.error-icon {
+  color: #d32f2f;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+/* Customer Profile Card */
+.customer-profile-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.customer-profile-header {
+  background: linear-gradient(135deg, #5c6bc0, #3f51b5);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.customer-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.customer-profile-header h2 {
+  margin: 10px 0 5px;
+  font-size: 24px;
+}
+
+.customer-id {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+.customer-profile-details {
+  padding: 20px;
+}
+
+.detail-item {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 15px;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.detail-label {
+  font-size: 14px;
+  color: #757575;
+  margin-bottom: 5px;
+}
+
+.detail-value {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Toggle Buttons */
+.toggle-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 30px;
+}
+
+.toggle-button {
+  background-color: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px;
+  padding: 12px 25px;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+}
+
+.toggle-button .button-icon {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.toggle-button:hover {
+  background-color: #f5f5f5;
+  transform: translateY(-2px);
+}
+
+.toggle-button.active {
+  background-color: #3f51b5;
+  color: white;
+  border-color: #3f51b5;
+  box-shadow: 0 4px 8px rgba(63, 81, 181, 0.3);
+}
+
+.toggle-button.active:hover {
+  background-color: #5c6bc0;
+}
+
+/* Activity Section */
+.activity-section {
+  margin-top: 20px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #333;
+}
+
+.section-icon {
+  margin-right: 10px;
+  color: #3f51b5;
+}
+
+.item-count {
+  margin-left: 10px;
+  background-color: #e8eaf6;
+  color: #3f51b5;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.activity-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.activity-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.donation-card {
+  border-top: 4px solid #c9b29a;
+}
+
+.card-header {
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-approved {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-pending {
+  background-color: #fff8e1;
+  color: #f57f17;
+}
+
+.status-returned {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-overdue {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.status-default {
+  background-color: #f5f5f5;
+  color: #616161;
+}
+
+.card-content {
+  padding: 15px;
+}
+
+.card-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-detail:last-child {
+  margin-bottom: 0;
+}
+
+.detail-icon {
+  margin-right: 10px;
+  color: #757575;
+}
+
+.card-actions {
+  padding: 15px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.view-details-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #3f51b5;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.view-details-button:hover {
+  background-color: #5c6bc0;
+}
+
+.no-data-message {
+  background-color: #f5f5f5;
+  padding: 30px;
+  text-align: center;
+  border-radius: 8px;
+  color: #757575;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cards-grid {
+      grid-template-columns: 1fr;
+  }
+  
+  .toggle-button {
+      padding: 10px 15px;
+      min-width: 120px;
+      font-size: 14px;
+  }
+}
+

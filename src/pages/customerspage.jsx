@@ -147,7 +147,7 @@ const CustomersPage = () => {
                           <ul className='book-items'>
                             {users.map((user,index) => (
                                 <li key={user.user_id || index} className='book-item'>
-                                    <span>{user.user_id}</span>   <span>{user.username}</span>   <span>{user.user_number}</span>
+                                    <Link to={`/customers/user/${user.user_id}`} className='link-to-detailspage'><span>{user.user_id}</span>   <span>{user.username}</span>   <span>{user.user_number}</span></Link>
                                 </li>
                             ))}
                           </ul>
@@ -164,4 +164,3 @@ const CustomersPage = () => {
 export default CustomersPage;
 
 
-// // the problem here when i put to print the users if the length>0 it prints 'no customers available'

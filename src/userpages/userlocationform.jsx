@@ -14,6 +14,12 @@ import 'leaflet/dist/leaflet.css';
 import '../index.css';
 
 const UserLocationForm = () => {
+    const { token, username } = useAuth();
+    const navigate = useNavigate();
+    const params = useParams();
+    const [notificationId, setNotificationId] = useState(null);
+    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
+
     const [deliveryInfo, setDeliveryInfo] = useState({
         name: '',
         userId: '',
@@ -22,36 +28,38 @@ const UserLocationForm = () => {
         preferredDate: '',
         latitude: null,
         longitude: null,
+        notificationId: ''
     });
-    const { token, username } = useAuth();
-    const navigate = useNavigate();
-    const { notificationId } = useParams(); // Extract notificationId from URL
-    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
 
     useEffect(() => {
+        if (params.notification_id) {
+            setNotificationId(params.notification_id);
+            console.log("Extracted notificationId:", params.notification_id);
+        }
+    }, [params]);
+
+    useEffect(() => {
+        if (!token) return;
         const fetchUserId = async () => {
-            if (!token) return;
             try {
                 const idResponse = await API.get('/api/users/me/id', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
+                    headers: { 'Authorization': `Bearer ${token}` },
                 });
 
-                if (idResponse.data && idResponse.data.data && idResponse.data.data.user_id) {
+                if (idResponse.data?.data?.user_id) {
                     setDeliveryInfo((prev) => ({
                         ...prev,
                         userId: idResponse.data.data.user_id,
                         name: username,
+                        notificationId: params.notification_id || '',
                     }));
                 }
             } catch (err) {
                 console.error('Error fetching user ID:', err);
             }
         };
-
         fetchUserId();
-    }, [token, username]);
+    }, [token, username, params.notification_id]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -74,27 +82,36 @@ const UserLocationForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
+        // Check the notification type and set the delivery type accordingly
+        const deliveryType = deliveryInfo.notificationId.type === "donation" ? "donation" : "return";
+    
+        const finalDeliveryInfo = { 
+            ...deliveryInfo, 
+            notificationId,
+            type: deliveryType 
+        };
+    
+        console.log("Submitting Delivery Data:", finalDeliveryInfo);
+    
         try {
-            const response = await API.post(
-                '/api/delivery',
-                deliveryInfo,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
-
+            const response = await API.post('/api/delivery', finalDeliveryInfo, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+    
             if (response.data.success) {
-                // Update notification status if notificationId is available
-                if (notificationId) {
-                    await API.patch(`/api/notifications/${notificationId}/status`, { status: "filledin" });
-                }
-
                 alert('Delivery information saved successfully!');
-                navigate('/userhomepage');
+    
+                const updateResponse = await API.patch(`/api/notifications/${notificationId}/status`, 
+                    { status: "filledin" },
+                    { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+    
+                console.log('Notification status update response:', updateResponse.data);
+                navigate('/user-deliveries-page');
             } else {
                 console.error('Failed to save delivery information');
             }
@@ -102,6 +119,8 @@ const UserLocationForm = () => {
             console.error('Error saving delivery information:', error);
         }
     };
+    
+    
 
     return (
         <div className='nav-bar'>
@@ -110,18 +129,14 @@ const UserLocationForm = () => {
                 <h3><Link to='/userhomepage'><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to='/donate-books-userpages'><BiDonateHeart /> Donate Books</Link></h3>
                 <h3><Link to='/borrowed-books-userpages'><RiBookShelfLine /> Borrowed Books</Link></h3>
-                <h3><Link to={"/user-deliveries-page"}><TbTruckDelivery /> Delivery</Link></h3>
+                <h3><Link to={'/user-deliveries-page'}><TbTruckDelivery /> Delivery</Link></h3>
             </div>
-
             <div className='content'>
                 <header className='header'>
                     <h3 className='homepage'>Delivery Information</h3>
                     <div className='user-info'>
-                        <img 
-                            src={deliveryInfo.userId ? `${BASE_URL}/api/users/photo-by-user-id/${deliveryInfo.userId}` : `${BASE_URL}/uploads/no_img.jpeg`} 
-                            className='profile-pic' 
-                            alt='User Profile'
-                            crossOrigin="anonymous" 
+                        <img src={`${BASE_URL}/api/users/photo-by-user-id/${deliveryInfo.userId}`} 
+                            className='profile-pic' alt='User Profile' crossOrigin="anonymous" 
                             onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
                         />
                         <NotificationBell customerId={deliveryInfo.userId} />
@@ -129,52 +144,25 @@ const UserLocationForm = () => {
                         <Logout />
                     </div>
                 </header>
-
                 <div className='delivery-form'>
                     <h3>Enter Your Delivery Information</h3>
                     <form onSubmit={handleSubmit}>
                         <label>
                             Address:
-                            <input
-                                type='text'
-                                name='address'
-                                value={deliveryInfo.address}
-                                onChange={handleInputChange}
-                                required
-                            />
+                            <input type='text' name='address' value={deliveryInfo.address} onChange={handleInputChange} required />
                         </label>
                         <label>
                             Phone Number:
-                            <input
-                                type='text'
-                                name='phoneNumber'
-                                value={deliveryInfo.phoneNumber}
-                                onChange={handleInputChange}
-                                required
-                            />
+                            <input type='text' name='phoneNumber' value={deliveryInfo.phoneNumber} onChange={handleInputChange} required />
                         </label>
                         <label>
                             Preferred Delivery Date:
-                            <input
-                                type='date'
-                                name='preferredDate'
-                                value={deliveryInfo.preferredDate}
-                                onChange={handleInputChange}
-                                required
-                            />
+                            <input type='date' name='preferredDate' value={deliveryInfo.preferredDate} onChange={handleInputChange} required />
                         </label>
-
                         <div className='map-container'>
                             <h4>Select Your Location on the Map</h4>
-                            <MapContainer
-                                center={[51.505, -0.09]}
-                                zoom={13}
-                                style={{ height: '300px', width: '100%' }}
-                            >
-                                <TileLayer
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                />
+                            <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: '300px', width: '100%' }}>
+                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap contributors' />
                                 <MapClickHandler />
                                 {deliveryInfo.latitude && deliveryInfo.longitude && (
                                     <Marker position={[deliveryInfo.latitude, deliveryInfo.longitude]}>
@@ -183,7 +171,6 @@ const UserLocationForm = () => {
                                 )}
                             </MapContainer>
                         </div>
-
                         <button type='submit'>Save Delivery Information</button>
                     </form>
                 </div>

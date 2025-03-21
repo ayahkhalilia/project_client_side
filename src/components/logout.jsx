@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate,Link } from 'react-router-dom';
 import API from '../axiosConfig';
 import { useAuth } from '../context/AuthContext';
-import CustomerProfile from '../userpages/customerprofile';
 
 
 const Logout = () => {

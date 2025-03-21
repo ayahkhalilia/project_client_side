@@ -44,7 +44,6 @@ const BookDetailsPageUser = () => {
         fetchUserId();
     }, [token]);
 
-    // Fetch current user ID from /me/id endpoint
     useEffect(() => {
         const fetchBookDetailsUserPage = async () => {
             if (!token) {

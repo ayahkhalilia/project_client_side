@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import SearchBar from '../components/searchbar.jsx';
 import Logout from '../components/logout.jsx';
 import { useAuth } from '../context/AuthContext';
-import SendOverdueNotification from '../components/sendoverdduenotification.jsx'; 
 import '../index.css';
 
 const ManageReturnBooks = () => {
@@ -27,8 +26,7 @@ const ManageReturnBooks = () => {
                 const response = await API.get('/api/users/me/id', {
                     headers: { 'Authorization': `Bearer ${token}` },
                 });
-                // Correctly access the nested user_id in the response
-                if (response.data && response.data.data && response.data.data.user_id) {
+                if (response.data?.data?.user_id) {
                     setUserId(response.data.data.user_id);
                 }
             } catch (err) {
@@ -37,7 +35,6 @@ const ManageReturnBooks = () => {
         };
         fetchUserId();
     }, [token]);
-
 
     useEffect(() => {
         const fetchBookBorrowings = async () => {
@@ -62,7 +59,7 @@ const ManageReturnBooks = () => {
     }, [token]);
 
     const handleSearchResults = (results) => {
-        console.log('Search Results:', results); 
+        console.log('Search Results:', results);
         setBookborrowings(results);
     };
 
@@ -80,15 +77,15 @@ const ManageReturnBooks = () => {
 
         try {
             for (const borrowing of overdueBooks) {
-                const customerId = Number(borrowing.user_id._id);
-                if (isNaN(customerId)) {
-                    console.error("Invalid customer ID:", borrowing.user_id._id);
+                const customerId = borrowing.user_id?.user_id;
+                if (!customerId) {
+                    console.error("Invalid customer ID:", borrowing.user_id);
                     continue;
                 }
 
                 await API.post('/api/notifications/send-overdue', {
                     borrowing_id: borrowing.borrowing_id,
-                    customer_id: customerId,
+                    customer_id: customerId
                 });
             }
             alert("Overdue notifications sent successfully.");
@@ -101,7 +98,7 @@ const ManageReturnBooks = () => {
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-            <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{ width: '200px', height: 'auto' }} />
+                <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{ width: '200px', height: 'auto' }} />
                 <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/customers"><LuUsersRound /> Customers</Link></h3>
                 <h3><Link to="/book-requests"><RiBookShelfLine /> Book Requests</Link></h3>
@@ -125,7 +122,7 @@ const ManageReturnBooks = () => {
                 </header>
 
                 <div className='search-bar'>
-                <SearchBar onResults={handleSearchResults} searchType="manage-requests" />
+                    <SearchBar onResults={handleSearchResults} searchType="manage-requests" />
                 </div>
 
                 <button className="send-all-btn" onClick={sendNotificationsToAll}>
@@ -144,7 +141,6 @@ const ManageReturnBooks = () => {
                                 <span className="header-item">Borrow Date</span>
                                 <span className="header-item">Due Date</span>
                                 <span className="header-item">Status</span>
-                                <span className="header-item">Actions</span>
                             </div>
                             <ul className="book-items">
                                 {bookborrowings.map((borrowing, index) => (
@@ -155,13 +151,6 @@ const ManageReturnBooks = () => {
                                         <span>{new Date(borrowing.borrow_date).toLocaleDateString()}</span>
                                         <span>{new Date(borrowing.due_date).toLocaleDateString()}</span>
                                         <span>{borrowing.borrowing_status}</span>
-                                        {isBookOverdue(borrowing.due_date) && borrowing.borrowing_status !== 'returned' && (
-                                            <SendOverdueNotification
-                                                borrowingId={borrowing.borrowing_id}
-                                                customerId={Number(borrowing.user_id._id)}
-                                                bookTitle={borrowing.book_id?.title || "Unknown Title"}
-                                            />
-                                        )}
                                     </li>
                                 ))}
                             </ul>

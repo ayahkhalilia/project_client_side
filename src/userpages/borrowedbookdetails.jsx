@@ -69,13 +69,20 @@ const BorrowedBookDetailsPageUser = () => {
             const response = await API.put(`/api/books/return/${borrowing_id}`, {}, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            alert('Book returned successfully!');
-            navigate('/borrowed-books-userpages');
+    
+            if (response.status === 200) {
+                alert('Book returned successfully!');
+                navigate('/borrowed-books-userpages');
+            } else {
+                alert('Failed to return book. Please try again.');
+            }
         } catch (error) {
+            console.error("Error returning book:", error.response?.data || error.message);
             alert('Failed to return book. Please try again.');
         }
     };
-
+    
+    
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
     return (
@@ -110,21 +117,18 @@ const BorrowedBookDetailsPageUser = () => {
                 <div className='cont'>
                     {borrowedBook ? (
                         <div className='book-details-container'>
-                            <div className='book-image'>
-                                {borrowedBook.book_id?.book_photo ? (
-                                    <>
-                                            {console.log('Book Photo ID:', borrowedBook.book_id.book_photo)}
-
-                                    <img 
-                                        src={`${BASE_URL}/api/books/photo/id/${borrowedBook.book_id.book_photo}`} 
-                                        alt={borrowedBook.book_id.title} 
-                                        style={{ width: '200px', height: '250px' }} 
-                                        onError={(e) => {
-                                            console.error('Image load error:', e);
-                                            console.error('Failed URL:', `${BASE_URL}/api/books/photo/id/${borrowedBook.book_id.book_photo}`);
-                                            e.target.src = `${BASE_URL}/uploads/no_img.jpeg`;
-                                        }}
-                                    /></>
+                            <div className="book-image">
+                                {borrowedBook.book_id ? (
+                                    <img
+                                    src={`${BASE_URL}/api/books/photo/${borrowedBook.book_id.book_photo}`}
+                                    alt={borrowedBook.book_id.title || 'Book Image'}
+                                    style={{ width: '200px', height: '250px' }}
+                                    crossOrigin="anonymous"
+                                    onError={(e) => {
+                                        console.error('Image load error:', e);
+                                        e.target.src = `${BASE_URL}/uploads/no_img.jpeg`;
+                                    }}
+                                />
                                 ) : (
                                     <p>No Image Available</p>
                                 )}

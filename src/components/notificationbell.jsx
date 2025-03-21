@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IoIosNotificationsOutline } from "react-icons/io";
-import { Link, useNavigate } from "react-router-dom"; // For navigation
+import { Link, useNavigate } from "react-router-dom"; 
 import API from '../axiosConfig'; 
 import "../index.css";
 
@@ -8,16 +8,15 @@ const NotificationBell = ({ customerId }) => {
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        console.log('Fetching notifications for customer ID:', customerId); // Debugging
+        console.log('Fetching notifications for customer ID:', customerId); 
         const response = await API.get(`/api/notifications/${customerId}`);
-        console.log('Backend response:', response.data); // Debugging
+        console.log('Backend response:', response.data);
 
-        // Ensure response.data.notifications is an array
         if (response.data.success && Array.isArray(response.data.notifications)) {
           setNotifications(response.data.notifications);
         } else {
@@ -41,9 +40,8 @@ const NotificationBell = ({ customerId }) => {
     setIsOpen((prev) => !prev);
   };
 
-  // Function to handle navigation to the delivery form
-  const handleDeliveryFormClick = (requestId) => {
-    navigate(`/delivery-form/${requestId}`); // Navigate to the delivery form with the request ID
+  const handleDeliveryFormClick = (notificationId) => {
+    navigate(`/user-location-form/${notificationId}`);
   };
 
   return (
@@ -59,15 +57,16 @@ const NotificationBell = ({ customerId }) => {
           {notifications.length > 0 ? (
             notifications.map((notification) => (
               <div key={notification._id} className="notification-item">
-                <p>{notification.message}</p><Link to={"/user-location-form"}><button>fill info</button></Link>
+                <p>{notification.message}</p>
                 <small>{new Date(notification.createdAt).toLocaleString()}</small>
-                {/* Show button only for approved requests */}
-                {notification.status === "approved" && (
+
+                {/* Show "Fill Delivery Info" button for "waiting" status */}
+                {notification.status !== "rejected" && (
                   <button
-                    onClick={() => handleDeliveryFormClick(notification.requestId)}
+                    onClick={() => handleDeliveryFormClick(notification._id)}
                     className="delivery-button"
                   >
-                    Fill Delivery Information
+                    Fill Delivery Info
                   </button>
                 )}
               </div>

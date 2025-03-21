@@ -13,21 +13,20 @@ import { TbTruckDelivery } from "react-icons/tb";
 import '../index.css';
 
 const DonateBooksPage = () => {
-    const [formData, setFormData] = useState({
-        book_title: '',
-        book_author: '',
-        book_condition: 'new',
-        category: '',
-        publication_year: '',
-        book_photo: null,
-    });
-    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
-
-    const [error, setError] = useState(null);
-    const { token, username } = useAuth();
+    const [book_title, setBookTitle] = useState('');
+    const [book_author, setBookAuthor] = useState('');
+    const [publicationYear, setPublicationYear] = useState('');
+    const [book_condition, setBookCondition] = useState('new');
+    const [category, setCategory] = useState('');
+    const [photo, setPhoto] = useState();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(null);
     const [userId, setUserId] = useState(null);
-
+    const { token, username } = useAuth();
+    const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
+    console.log("Token from useAuth():", token);
+    console.log("Username from useAuth():", username);
     useEffect(() => {
         const fetchUserId = async () => {
             if (!token) return;
@@ -37,8 +36,9 @@ const DonateBooksPage = () => {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                console.log('User ID response:', response.data);
-                setUserId(response.data.data.user_id);
+                if (response.data && response.data.data && response.data.data.user_id) {
+                    setUserId(response.data.data.user_id);
+                }
             } catch (err) {
                 console.error('Error fetching user ID:', err);
             }
@@ -46,63 +46,51 @@ const DonateBooksPage = () => {
         fetchUserId();
     }, [token]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleFileChange = (e) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            book_photo: e.target.files[0],
-        }));
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(null);
-
-        const { book_title, book_author, book_condition, category, publication_year, book_photo } = formData;
-
-        if (!book_title || !book_author || !book_condition || !category || !publication_year || !book_photo) {
-            setError('All fields are required');
+        if (!token) {
+            setError("No authentication token found");
             return;
         }
-
-        const formDataToSend = new FormData();
-        formDataToSend.append('book_title', book_title);
-        formDataToSend.append('book_author', book_author);
-        formDataToSend.append('book_condition', book_condition);
-        formDataToSend.append('category', category);
-        formDataToSend.append('publication_year', publication_year);
-        formDataToSend.append('book_photo', book_photo);
-
-        for (let pair of formDataToSend.entries()) {
-            console.log(pair[0] + ':', pair[1]);
+    
+        const formData = new FormData();
+        formData.append("book_title", book_title);
+        formData.append("book_author", book_author);
+        formData.append("book_condition", book_condition);
+        formData.append("category", category);
+        formData.append("publication_year", publicationYear);
+    
+        if (photo) {
+            console.log("Appending book_photo:", photo); // Debugging log
+            formData.append("book_photo", photo); 
+        } else {
+            console.error("No file selected!");
+            setError("Please upload a book photo.");
+            return;
         }
-
+    
         try {
-            const response = await API.post('/api/books/donate', formDataToSend, {
+            const response = await API.post("/api/books/donate", formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
                 },
             });
-
+    
             if (response.data.success) {
-                alert('Donation successful!');
-                navigate('/userhomepage');
+                alert("Donation successful!");
+                navigate("/userhomepage");
             } else {
-                setError(response.data.error || 'Failed to send donation request.');
+                setError(response.data.error || "Failed to send donation request.");
             }
         } catch (error) {
-            console.error('Error sending request:', error.response?.data || error);
-            setError(error.response?.data?.error || 'Failed to send donation request.');
+            console.error("Error sending request:", error.response?.data || error);
+            setError(error.response?.data?.error || "Failed to send donation request.");
         }
     };
+    
+    
 
     return (
         <div className='nav-bar'>
@@ -146,8 +134,8 @@ const DonateBooksPage = () => {
                                     type="text"
                                     name="book_title"
                                     placeholder="Book Title"
-                                    value={formData.book_title}
-                                    onChange={handleChange}
+                                    value={book_title}
+                                    onChange={(e) => setBookTitle(e.target.value)}
                                     required
                                 />
                             </div>
@@ -156,13 +144,13 @@ const DonateBooksPage = () => {
                                     type="text"
                                     name="book_author"
                                     placeholder="Author"
-                                    value={formData.book_author}
-                                    onChange={handleChange}
+                                    value={book_author}
+                                    onChange={(e) => setBookAuthor(e.target.value)}
                                     required
                                 />
                             </div>
                             <div>
-                                <select name="book_condition" value={formData.book_condition} onChange={handleChange} required>
+                                <select name="book_condition" value={book_condition} onChange={(e) => setBookCondition(e.target.value)} required>
                                     <option value="new">New</option>
                                     <option value="good">Good</option>
                                     <option value="worn">Worn</option>
@@ -173,33 +161,38 @@ const DonateBooksPage = () => {
                                     type="text"
                                     name="category"
                                     placeholder="Category"
-                                    value={formData.category}
-                                    onChange={handleChange}
+                                    value={category}
+                                    onChange={(e) => setCategory(e.target.value)}
                                     required
                                 />
                             </div>
                             <div>
                                 <input
                                     type="number"
-                                    name="publication_year"
+                                    name="publicationYear"
                                     placeholder="Publication Year"
-                                    value={formData.publication_year}
-                                    onChange={handleChange}
+                                    value={publicationYear}
+                                    onChange={(e) => {
+                                        const year = e.target.value;
+                                        if (year.length <= 4 ) { 
+                                            setPublicationYear(year);
+                                        }
+                                    }}                                    
                                     min="1900"
                                     max={new Date().getFullYear()}
                                     required
                                 />
                             </div>
                             <div>
-                                <input
+                            <input
                                     type="file"
-                                    name="book_photo"
-                                    onChange={handleFileChange} 
+                                    accept="image/*"
+                                    onChange={(e) => setPhoto(e.target.files[0])}
                                     required
                                 />
                             </div>
                             {error && <p className="error-message">{error}</p>}
-                            <button type="submit">Send Donation Request</button>
+                            <button type="submit" onClick={handleSubmit}>Send Donation Request</button>
                         </form>
                     </div>
                 </div>

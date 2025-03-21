@@ -122,8 +122,8 @@ const BookDonationsPage = () => {
                                         <Link to={`/books/pending-donation-requests/${donation.donation_id}`} className='link-to-detailspage'>
                                             <span>{donation.donation_id}</span>
                                             <span>{donation.user_id?.username || 'Unknown User'}</span>
-                                            <span>{donation.book_id?.title || 'Unknown Title'}</span>
-                                            <span>{donation.book_id?.author || 'Unknown Author'}</span>
+                                            <span>{donation.book_title || 'Unknown Title'}</span>
+                                            <span>{donation.book_author || 'Unknown Author'}</span>
                                             <span>{donation.book_condition || 'Unknown Condition'}</span>
                                         </Link>
                                     </li>

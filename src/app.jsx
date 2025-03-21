@@ -20,9 +20,11 @@ import UserLocationForm from './userpages/userlocationform.jsx';
 import UserNotificationsPage from './userpages/usernotifications.jsx';
 import UserDeliveries from './userpages/userdeliveries.jsx';
 import DeliveryTracking from './userpages/deliverytracking.jsx'
-import CustomerProfile from './userpages/customerprofile.jsx'
-
 import { AuthProvider } from './context/AuthContext';
+
+import Borroweddetails from './pages/borroweddetails.jsx';
+import Donateddetails from './pages/donateddetails.jsx';
+import CustomerDetails from './pages/customerdetails.jsx'
 
 const App = () => {
     return (
@@ -40,18 +42,22 @@ const App = () => {
                 <Route path='/add-book-list' element={<AddBookFormPage/>}/>
                 <Route path='/managereturnbooks' element={<ManageReturnBooks/>}/>
                 <Route path='/books/borrow-requests/:borrowing_id' element={<BorrowRequestDetailsPage/>}/>
-
+                
+                <Route path='/books/borrow-requests/:borrowing_id' element={<Borroweddetails/>}/>
+                <Route path='/books/borroweddetails/:borrowing_id' element={<Borroweddetails/>}/>
+                <Route path='/books/donateddetails/:donation_id' element={<Donateddetails/>}/>
+                <Route path="/customers/details/:customerId" element={<CustomerDetails />} />
+                <Route path="/customers/user/:user_id2" element={<CustomerDetails />} />
 
                 <Route path='/userhomepage' element={<UserHomePage/>}/>
             <Route path='/books/customer/:book_id' element={<BookDetailsPageUser/>}/>
             <Route path='/donate-books-userpages' element={<DonateBooksPage/>}/>
             <Route path='/borrowed-books-userpages' element={<BorrowedBooksPage/>}/>
             <Route path='/books/my-borrowings/:borrowing_id' element={<BorrowedBookDetailsPageUser/>}/>
-            <Route path='/user-location-form' element={<UserLocationForm/>}/>
+            <Route path='/user-location-form/:notification_id' element={<UserLocationForm/>}/>
             <Route path='/user-notifications-page' element={<UserNotificationsPage/>}/>
             <Route path='/user-deliveries-page' element={<UserDeliveries/>}/>
             <Route path='/user-delivery-tracking-page/:deliveryId' element={<DeliveryTracking/>}/>
-            <Route path='/customer-profile' element={<CustomerProfile/>}/>
 
             </Routes>
         </AuthProvider>

@@ -112,9 +112,7 @@ const UserDeliveries = () => {
                         <Logout /> {}
                     </div> 
                 </header>
-                <div className='search-bar'>
-                        <SearchBar apiEndpoint={"https://rebook-backend-ldmy.onrender.com/api/books"} onResults={handleSearchResults} />
-                </div> 
+
                 <div className="user-deliveries">
       <h2>Your Deliveries</h2>
       {error && <p className="error">{error}</p>}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import API from '../axiosConfig'; 
+import API from '../axiosConfig';
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
 import { LuUsersRound } from "react-icons/lu";
@@ -8,31 +8,36 @@ import { BiDonateHeart } from "react-icons/bi";
 import { GrUserManager } from "react-icons/gr";
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/logout.jsx';
-import { useAuth } from '../context/AuthContext'; 
-import { format } from 'date-fns'; 
+import { useAuth } from '../context/AuthContext';
+import { format } from 'date-fns';
+
 
 import '../index.css';
 
-const DonationDetailsPage = () => {
+
+const Donateddetails = () => {
     const [donation, setDonation] = useState(null);
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { token, user } = useAuth(); 
+    const { token, user } = useAuth();
     const { donation_id } = useParams();
     const { username } = useAuth();
     const [userId, setUserId] = useState(null);
+   
     const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
+    const navigate = useNavigate();
 
-    const navigate = useNavigate(); 
+
     useEffect(() => {
         const fetchUserId = async () => {
             if (!token) return;
             try {
                 const response = await API.get('/api/users/me/id', {
-                    headers: { 'Authorization': `Bearer ${token}` },
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                 });
-
-                if (response.data?.data?.user_id) {
+                if (response.data && response.data.data && response.data.data.user_id) {
                     setUserId(response.data.data.user_id);
                 }
             } catch (err) {
@@ -41,6 +46,7 @@ const DonationDetailsPage = () => {
         };
         fetchUserId();
     }, [token]);
+
 
     useEffect(() => {
         const fetchDonationDetails = async () => {
@@ -65,66 +71,45 @@ const DonationDetailsPage = () => {
         fetchDonationDetails();
     }, [donation_id, token]);
 
+
     const handleAccept = async () => {
-        if (!token || !donation) return;
-        
+        if (!token) return;
         try {
-            console.log(`Handling accept for donation ${donation_id} - Time: ${Date.now()}`);
-    
-            // Accept donation request
-            const acceptResponse = await API.put(`/api/books/accept-donation/${donation_id}`, {}, {
+            await API.put(`/api/books/accept-donation/${donation_id}`, {}, {
                 headers: { 'Authorization': `Bearer ${token}` },
             });
-    
-            if (!acceptResponse.data) {
-                throw new Error("Failed to accept donation.");
-            }
-    
             setDonation((prev) => ({ ...prev, donation_status: 'accepted' }));
             alert('Donation request accepted successfully!');
-    
-            // Send notification to the donor
-
-            console.log('booktitle:', donation.book_title);
-            navigate('/book-donations'); 
-    
-        } catch (error) {
-            console.error('Error accepting donation request:', error.response?.data || error.message);
-            alert('Accepting donation request failed: ' + (error.response?.data?.message || error.message));
+            navigate('/book-donations');
+        } catch {
+            alert('Accepting donation request failed');
         }
     };
-    
-    
-    
-    
-    
+
+
     const handleReject = async () => {
-        if (!token || !donation) return;
+        if (!token) return;
         try {
-            // Reject donation request
             await API.put(`/api/books/reject-donation/${donation_id}`, {}, {
                 headers: { 'Authorization': `Bearer ${token}` },
             });
-    
             setDonation((prev) => ({ ...prev, donation_status: 'rejected' }));
             alert('Donation request rejected successfully!');
-    
-
-            navigate('/book-donations'); 
-        } catch (error) {
-            console.error('Error rejecting donation request:', error);
-            alert('donation request failed');
+            navigate('/book-donations');
+        } catch {
+            alert('Rejecting donation request failed');
         }
     };
-    
+
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
 
+
     return (
         <div className='nav-bar'>
             <div className='bar-rec'>
-            <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{ width: '200px', height: 'auto' }} />
+                <img src={`${BASE_URL}/uploads/brown_logo.jpg`} alt='Logo' style={{width:'200px'}}/>
                 <h3><Link to="/home"><IoHomeOutline /> Home</Link></h3>
                 <h3><Link to="/customers"><LuUsersRound /> Customers</Link></h3>
                 <h3><Link to="/book-requests"><RiBookShelfLine /> Book Requests</Link></h3>
@@ -132,47 +117,41 @@ const DonationDetailsPage = () => {
                 <h3><Link to="/managereturnbooks"><GrUserManager /> Manage return books</Link></h3>
             </div>
 
+
             <div className='content'>
-            <header className='header'>
+                <header className='header'>
                     <h3 className='homepage'>Donation Request Details</h3>        
-                    
-                    {}
                     <div className='user-info'>
-                    <img 
-                            src={userId ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` : `${BASE_URL}/uploads/no_img.jpeg`} 
-                            className='profile-pic' 
+                        <img
+                            src={userId ? `${BASE_URL}/api/users/photo-by-user-id/${userId}` : `${BASE_URL}/uploads/no_img.jpeg`}
+                            className='profile-pic'
                             alt='User Profile'
-                            crossOrigin="anonymous" 
+                            crossOrigin="anonymous"
                             onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
-                        />                        
+                        />
                         <span>Hi, {username}</span>
-                        <Logout /> {}
-                    </div> 
+                        <Logout />
+                    </div>
                 </header>
+
 
                 <div className='cont'>
                     {donation ? (
                         <div className="donation-details">
-                        {donation.book_photo ? (
                             <img
-                            src={`${BASE_URL}/api/books/photo/${donation.book_photo}`}
-                            alt={donation.book_title}
-                            className="book-thumbnail"
-                            crossOrigin="anonymous"
-                            onError={(e) => { e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
-                            style={{ width: '200px', height: '250px', objectFit: 'cover' }}
+                                className="book-image"
+                                src={`${BASE_URL}/api/books/photo/${donation.book_photo}`}
+                                alt={donation.book_title}
+                                onError={(e) => { e.target.onerror = null; e.target.src = `${BASE_URL}/uploads/no_img.jpeg`; }}
                             />
-                        ) : (
-                            <p>No Image Available</p>
-                        )}                            <div className="book-details">
+                            <div className="book-details">
                                 <h3>{donation.book_title}</h3>
                                 <p><strong>Author:</strong> {donation.book_author}</p>
                                 <p><strong>Condition:</strong> {donation.book_condition}</p>
                                 <p><strong>Donation Date:</strong> {format(new Date(donation.donation_date), 'MMMM dd, yyyy')}</p>
                                 <p><strong>Donor Name:</strong> {donation.user_name}</p>
                                 <p><strong>Donor ID:</strong> {donation.user_id}</p>
-                                <button onClick={handleAccept} style={{background: '#9fed51',border: 'none', borderRadius: '5px', cursor: 'pointer'}}>Accept</button>
-                                <button onClick={handleReject} style={{background: '#ed5151',border: 'none', borderRadius: '5px', cursor: 'pointer'}}>Reject</button>
+                               
                             </div>
                         </div>
                     ) : (
@@ -184,4 +163,5 @@ const DonationDetailsPage = () => {
     );
 };
 
-export default DonationDetailsPage;
+
+export default Donateddetails;

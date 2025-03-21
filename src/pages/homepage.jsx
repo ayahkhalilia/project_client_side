@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
+import { IoHomeOutline } from 'react-icons/io5';
 import { LuUsersRound } from 'react-icons/lu';
 import { RiBookShelfLine } from 'react-icons/ri';
 import { BiDonateHeart } from 'react-icons/bi';
@@ -23,7 +23,6 @@ const HomePage = () => {
     const BASE_URL = 'https://rebook-backend-ldmy.onrender.com';
     
     const navigate = useNavigate();
-   // Update your fetchUserId function
 useEffect(() => {
     const fetchUserId = async () => {
         if (!token) return;
@@ -67,7 +66,6 @@ useEffect(() => {
         console.log('User data:', user);
     }, [token, user, authLoading, navigate]);
     
-    // Get user ID if needed
  
 
     // Fetch books
@@ -132,7 +130,7 @@ useEffect(() => {
         </div>;
     }
     
-    // If not authenticated or not a librarian, this will redirect
+    // If not authenticated or not a librarian this will redirect
     if (!token || (user && user.user_type !== 'librarian')) {
         return null; // Will be redirected by the useEffect
     }
@@ -146,7 +144,6 @@ useEffect(() => {
                 <h3><Link to="/book-requests"><RiBookShelfLine /> Book Requests</Link></h3>
                 <h3><Link to="/book-donations"><BiDonateHeart /> Book Donations</Link></h3>
                 <h3><Link to="/managereturnbooks"><GrUserManager /> Manage return books</Link></h3>
-                <div className='setting'><IoSettingsOutline /></div>
             </div>
 
             <div className='content'>

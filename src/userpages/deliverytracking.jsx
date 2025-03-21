@@ -73,22 +73,30 @@ const DeliveryTracking = () => {
   // Handle delivery confirmation
   const handleConfirmDelivery = async () => {
     try {
-        console.log(`Sending PATCH request to: /api/delivery/${deliveryId}/confirm`);
-        
-        const response = await API.patch(`/api/delivery/${deliveryId}/confirm`);
-        
-        console.log("Response:", response.data);
-
-        if (response.data.success) {
-            alert('Delivery confirmed successfully!');
-            navigate('/user-deliveries-page'); // Redirect to the deliveries page
-        } else {
-            console.error('Error: API did not return success:', response.data);
-        }
+      console.log(`Sending PATCH request to: /api/delivery/${deliveryId}/confirm`);
+  
+      const response = await API.patch(`/api/delivery/${deliveryId}/confirm`, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      console.log("Response:", response.data);
+  
+      if (response.data.success) {
+        alert('Delivery confirmed successfully!');
+        navigate('/user-deliveries-page'); // Redirect to the deliveries page
+      } else {
+        console.error('Error: API did not return success:', response.data);
+        alert(response.data.message);
+      }
     } catch (error) {
-        console.error('Error confirming delivery:', error);
+      console.error('Error confirming delivery:', error);
+      alert('Error confirming delivery.');
     }
-};
+  };
+  
+  
 
 
   if (error) {
@@ -166,7 +174,7 @@ const DeliveryTracking = () => {
             </MapContainer>
           </div>
 
-          {/* Conditionally render the Confirm Delivery button */}
+          {/* Confirm Delivery button */}
           {delivery.status !== 'delivered' && (
             <button onClick={handleConfirmDelivery} className="confirm-button">
               Confirm Delivery
